@@ -10,6 +10,7 @@ const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const SUPABASE_DB_URL = process.env.SUPABASE_DB_URL || '';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'change_me_now';
 const sessions = new Map();
@@ -75,6 +76,12 @@ function getSessionUsername(req) {
     return '';
   }
   return session.username;
+}
+
+async function getGeminiApiKey() {
+  if (GEMINI_API_KEY) return GEMINI_API_KEY;
+  const admin = await getQuery('SELECT api_key FROM users WHERE username = ?', [ADMIN_USERNAME]);
+  return String(admin?.api_key || '').trim();
 }
 
 
@@ -777,13 +784,15 @@ app.post('/api/questions', async (req, res) => {
     const topic = String(req.body.topic || '').trim();
     const difficulty = String(req.body.difficulty || 'normal').trim();
     const count = Math.min(100, Math.max(5, Number(req.body.count) || 10));
-    if (!GEMINI_API_KEY) {
-      return res.status(503).json({ success: false, message: 'La IA no está configurada. Agrega GEMINI_API_KEY en Render.' });
+
+    const geminiApiKey = await getGeminiApiKey();
+    if (!geminiApiKey) {
+      return res.status(503).json({ success: false, message: 'La IA no está configurada. Agrega GEMINI_API_KEY en Render o guarda la clave desde el panel de administrador.' });
     }
 
     const prompt = `Genera exactamente ${count} preguntas de opción múltiple en español sobre la materia "${subject}" y el tema que escribió el usuario: "${topic || 'general'}". Usa el tema literalmente, aunque sea raro, absurdo, imaginario o combine ideas inesperadas; no lo reemplaces por un tema distinto ni lo ignores. Si el tema no tiene base real, crea preguntas coherentes dentro de ese contexto. Incluye exactamente cuatro opciones distintas y una sola respuesta correcta por pregunta. Dificultad: ${difficulty}. Devuélvelas solo en JSON puro, sin markdown ni explicaciones. Estructura exacta: [{"question":"...","options":["...","...","...","..."],"correctIndex":0}]`;
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${geminiApiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -813,7 +822,7 @@ app.post('/api/questions', async (req, res) => {
     return res.json({ success: true, questions: validQuestions });
   } catch (error) {
     console.error('Error generando preguntas:', error);
-    return res.status(500).json({ success: false, message: 'No se pudieron generar las preguntas.' });
+    return res.status(502).json({ success: false, message: `Gemini no pudo generar las preguntas: ${error.message}` });
   }
 });
 
