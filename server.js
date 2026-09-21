@@ -9,8 +9,8 @@ const { Pool } = require('pg');
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const SUPABASE_DB_URL = process.env.SUPABASE_DB_URL || '';
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
+const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'change_me_now';
 const sessions = new Map();
@@ -78,8 +78,8 @@ function getSessionUsername(req) {
   return session.username;
 }
 
-async function getGeminiApiKey() {
-  if (GEMINI_API_KEY) return GEMINI_API_KEY;
+async function getGroqApiKey() {
+  if (GROQ_API_KEY) return GROQ_API_KEY;
   const admin = await getQuery('SELECT api_key FROM users WHERE username = ?', [ADMIN_USERNAME]);
   return String(admin?.api_key || '').trim();
 }
@@ -129,15 +129,15 @@ async function initDatabase() {
     const adminHash = hashPassword(ADMIN_PASSWORD, adminSalt);
     await runQuery(
       'INSERT INTO users (username, password_hash, salt, role, status, api_key, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [ADMIN_USERNAME, adminHash, adminSalt, 'admin', 'active', GEMINI_API_KEY || '', new Date().toISOString()]
+      [ADMIN_USERNAME, adminHash, adminSalt, 'admin', 'active', GROQ_API_KEY || '', new Date().toISOString()]
     );
     console.log('Usuario administrador creado:', ADMIN_USERNAME);
   } else {
     const adminSalt = crypto.randomBytes(16).toString('hex');
     const adminHash = hashPassword(ADMIN_PASSWORD, adminSalt);
     await runQuery(
-      'UPDATE users SET password_hash = ?, salt = ?, role = ?, status = ?, api_key = ? WHERE username = ?',
-      [adminHash, adminSalt, 'admin', 'active', GEMINI_API_KEY || '', ADMIN_USERNAME]
+      'UPDATE users SET password_hash = ?, salt = ?, role = ?, status = ?, api_key = COALESCE(?, api_key) WHERE username = ?',
+      [adminHash, adminSalt, 'admin', 'active', GROQ_API_KEY || null, ADMIN_USERNAME]
     );
     console.log('Usuario administrador validado:', ADMIN_USERNAME);
   }
@@ -785,28 +785,39 @@ app.post('/api/questions', async (req, res) => {
     const difficulty = String(req.body.difficulty || 'normal').trim();
     const count = Math.min(100, Math.max(5, Number(req.body.count) || 10));
 
-    const geminiApiKey = await getGeminiApiKey();
-    if (!geminiApiKey) {
-      return res.status(503).json({ success: false, message: 'La IA no está configurada. Agrega GEMINI_API_KEY en Render o guarda la clave desde el panel de administrador.' });
+    const groqApiKey = await getGroqApiKey();
+    if (!groqApiKey) {
+      return res.status(503).json({ success: false, message: 'La IA no está configurada. Agrega GROQ_API_KEY en Render o guarda la clave desde el panel de administrador.' });
     }
 
     const prompt = `Genera exactamente ${count} preguntas de opción múltiple en español sobre la materia "${subject}" y el tema que escribió el usuario: "${topic || 'general'}". Usa el tema literalmente, aunque sea raro, absurdo, imaginario o combine ideas inesperadas; no lo reemplaces por un tema distinto ni lo ignores. Si el tema no tiene base real, crea preguntas coherentes dentro de ese contexto. Incluye exactamente cuatro opciones distintas y una sola respuesta correcta por pregunta. Dificultad: ${difficulty}. Devuélvelas solo en JSON puro, sin markdown ni explicaciones. Estructura exacta: [{"question":"...","options":["...","...","...","..."],"correctIndex":0}]`;
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${geminiApiKey}`, {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${groqApiKey}`
+      },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }]
+        model: GROQ_MODEL,
+        temperature: 0.7,
+        messages: [
+          {
+            role: 'system',
+            content: 'Eres un generador de evaluaciones. Devuelve únicamente JSON válido, sin markdown ni explicaciones.'
+          },
+          { role: 'user', content: prompt }
+        ]
       })
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data?.error?.message || 'Error al consultar Gemini');
+      throw new Error(data?.error?.message || 'Error al consultar Groq');
     }
 
-    const text = data?.candidates?.[0]?.content?.parts?.map((part) => part.text).join('') || '[]';
+    const text = data?.choices?.[0]?.message?.content || '[]';
     const cleaned = text.replace(/```json|```/g, '').trim();
     const questions = JSON.parse(cleaned);
 
@@ -822,7 +833,7 @@ app.post('/api/questions', async (req, res) => {
     return res.json({ success: true, questions: validQuestions });
   } catch (error) {
     console.error('Error generando preguntas:', error);
-    return res.status(502).json({ success: false, message: `Gemini no pudo generar las preguntas: ${error.message}` });
+    return res.status(502).json({ success: false, message: `Groq no pudo generar las preguntas: ${error.message}` });
   }
 });
 
