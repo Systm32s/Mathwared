@@ -50,10 +50,14 @@ http://localhost:3000
 Puedes desplegarla en servicios como Render, Railway, Vercel + backend externo o cualquier hosting con Node.js. Para público real, asegúrate de:
 
 - configurar `PORT`
+- configura `SUPABASE_DB_URL` con la cadena PostgreSQL de Supabase
 - configurar `ADMIN_USERNAME`
 - configurar `ADMIN_PASSWORD`
 - configurar `GEMINI_API_KEY`
-- usar un almacenamiento persistente para SQLite o migrarlo a una base de datos externa
+
+El backend crea automáticamente las tablas `users` y `quiz_history` en Supabase al iniciar.
+Obtén `SUPABASE_DB_URL` desde Supabase: **Connect > ORMs > URI** o desde la cadena de conexión de PostgreSQL.
+No uses la `anon key` en esta variable y no publiques la contraseña de la base de datos.
 
 ## Cuenta administradora
 
