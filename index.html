@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="Mathwareevaluaciones académicas profesionales con preguntas generadas por tema y nivel de dificultad." />
+    <meta name="keywords" content="mathware, quiz, examen, educación, estadística, geometría, matemáticas" />
+    <meta name="author" content="Mathware" />
+    <title>Mathware</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="background-blur background-blur-a"></div>
+    <div class="background-blur background-blur-b"></div>
+
+    <div class="app-shell">
+        <header class="topbar">
+            <div class="brand-wrap">
+                <div class="brand-mark">
+                    <img src="unnamed-Photoroom.jpg" alt="Institución Educativa Integral El Saber" />
+                </div>
+                <div>
+                    <p class="brand-name">INSTITUCIÓN EDUCATIVA INTEGRAL EL SABER</p>
+                    <p class="brand-subtitle">Sistema de evaluación institucional</p>
+                </div>
+            </div>
+            <button id="btn-logout-top" class="ghost-button hidden" type="button">Cerrar sesión</button>
+        </header>
+
+        <main class="viewport">
+            <section id="welcome-view" class="view active" aria-label="Bienvenida">
+                <div class="panel panel-center">
+                    <div class="logo-wrap">
+                        <div class="logo-box">
+                            <img src="unnamed-Photoroom.jpg" alt="Institución Educativa Integral El Saber" />
+                        </div>
+                    </div>
+                    <h1 class="hero-title">INSTITUCIÓN EDUCATIVA <span>INTEGRAL EL SABER</span></h1>
+                    <p class="hero-copy">DESARROLLADO POR DIEGO BUITRAGO 10° remake 2026 V2.5</p>
+                    <div class="cta-row">
+                        <button id="btn-go-login" class="primary-button" type="button">Iniciar sesión</button>
+                        <button id="btn-go-register" class="secondary-button" type="button">Crear cuenta</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="login-view" class="view" aria-label="Iniciar sesión">
+                <div class="panel form-panel">
+                    <h2 class="section-title">Iniciar sesión</h2>
+                    <form id="login-form" class="auth-form" novalidate>
+                        <label class="field">
+                            <span>Usuario</span>
+                            <input id="login-user" type="text" autocomplete="username" placeholder="Nombre de usuario" />
+                        </label>
+                        <label class="field">
+                            <span>Contraseña</span>
+                            <input id="login-pass" type="password" autocomplete="current-password" placeholder="Tu contraseña" />
+                        </label>
+                        <div id="login-error" class="form-error" aria-live="polite"></div>
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit">Entrar</button>
+                            <button id="btn-login-back" class="ghost-button" type="button">Volver</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section id="register-view" class="view" aria-label="Registro">
+                <div class="panel form-panel">
+                    <h2 class="section-title">Crear cuenta</h2>
+                    <form id="register-form" class="auth-form" novalidate>
+                        <label class="field">
+                            <span>Usuario</span>
+                            <input id="register-user" type="text" autocomplete="username" placeholder="usuario" />
+                        </label>
+                        <label class="field">
+                            <span>Contraseña</span>
+                            <input id="register-pass" type="password" autocomplete="new-password" placeholder="mínimo 4 caracteres" />
+                        </label>
+                        <label class="field">
+                            <span>Confirmar contraseña</span>
+                            <input id="register-pass-confirm" type="password" autocomplete="new-password" placeholder="Repite la contraseña" />
+                        </label>
+                        <div id="register-error" class="form-error" aria-live="polite"></div>
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit">Registrarse</button>
+                            <button id="btn-register-back" class="ghost-button" type="button">Volver</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section id="menu-view" class="view" aria-label="Menú principal">
+                <div class="panel panel-center menu-panel">
+                    <h1 class="hero-title small">MATHWARE</h1>
+                    <p id="welcome-user" class="menu-greeting">Bienvenido</p>
+                    <div class="stacked-actions">
+                        <button id="btn-start-exam" class="primary-button" type="button">Generar examen</button>
+                        <button id="btn-simulator" class="secondary-button" type="button">Simulador de física</button>
+                        <button id="btn-history" class="secondary-button" type="button">Estadísticas</button>
+                        <button id="btn-admin-panel" class="ghost-button admin-button hidden" type="button">Panel de administrador</button>
+                    </div>
+                    <div class="stats-summary">
+                        <div>
+                            <span class="summary-label">Partidas</span>
+                            <strong id="summary-total">0</strong>
+                        </div>
+                        <div>
+                            <span class="summary-label">Promedio</span>
+                            <strong id="summary-average">0.0</strong>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="simulator-view" class="view" aria-label="Simulador de física">
+                <div class="panel panel-wide simulator-panel">
+                    <div class="simulator-heading">
+                        <div>
+                            <p class="eyebrow">Laboratorio de física</p>
+                            <h2 class="section-title">Simulador</h2>
+                            <p class="simulator-copy">Explora el comportamiento de un sistema, cambia sus variables y observa el resultado.</p>
+                        </div>
+                        <span id="simulation-category" class="difficulty-badge">Cinemática</span>
+                    </div>
+
+                    <div class="simulator-layout">
+                        <form id="simulator-form" class="simulator-controls" novalidate>
+                            <label class="field">
+                                <span>Sistema</span>
+                                <select id="simulation-type">
+                                    <option value="mru">Movimiento rectilíneo uniforme</option>
+                                    <option value="circular">Movimiento circular</option>
+                                    <option value="vertical">Movimiento vertical</option>
+                                    <option value="launch">Lanzamiento vertical</option>
+                                    <option value="freefall">Caída libre</option>
+                                    <option value="parabolic">Movimiento parabólico</option>
+                                    <option value="semiparabolic">Movimiento semiparabólico</option>
+                                    <option value="newton1">Primera ley de Newton</option>
+                                    <option value="newton2">Segunda ley de Newton</option>
+                                    <option value="newton3">Tercera ley de Newton</option>
+                                    <option value="torque">Torque o momento</option>
+                                    <option value="rotational">Equilibrio de rotación</option>
+                                    <option value="gravitycenter">Centro de gravedad</option>
+                                </select>
+                            </label>
+                            <label class="field gravity-field">
+                                <span>Gravedad personalizada <small>(m/s²)</small></span>
+                                <input id="simulation-gravity" type="number" min="0.01" max="30" step="0.01" value="9.81" required />
+                                <small class="field-hint">Límite permitido: 0.01 a 30 m/s²</small>
+                            </label>
+                            <div id="simulation-fields" class="simulation-fields"></div>
+                            <div class="form-actions">
+                                <button class="primary-button" type="submit">Calcular y simular</button>
+                                <button id="btn-simulator-back" class="ghost-button" type="button">Volver</button>
+                            </div>
+                        </form>
+
+                        <div class="simulation-stage-wrap">
+                            <div class="simulation-stage">
+                                <canvas id="simulation-canvas" width="640" height="360" aria-label="Animación de la simulación"></canvas>
+                            </div>
+                            <div id="simulation-result" class="simulation-result" aria-live="polite">
+                                <strong>Listo para simular</strong>
+                                <span>Selecciona un sistema y define sus valores.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="config-view" class="view" aria-label="Configuración del examen">
+                <div class="panel form-panel">
+                    <h2 class="section-title">Configurar cuestionario</h2>
+                    <form id="exam-form" class="auth-form" novalidate>
+                        <label class="field">
+                            <span>Materia</span>
+                            <select id="exam-subject">
+                                <option value="matematica">Matemática</option>
+                                <option value="lenguaje">Lenguaje</option>
+                                <option value="lectura critica">Lectura Crítica</option>
+                                <option value="filosofia">Filosofía</option>
+                                <option value="competencia ciudadana">Competencia Ciudadana</option>
+                                <option value="economia politica">Economía Política</option>
+                                <option value="educacion fisica">Educación Física</option>
+                                <option value="fisica">Física</option>
+                                <option value="quimica">Química</option>
+                                <option value="biologia">Biología</option>
+                                <option value="sociales">Sociales</option>
+                                <option value="geometria">Geometría</option>
+                                <option value="informatica">Informática</option>
+                                <option value="ingles">Inglés</option>
+                                <option value="estadistica">Estadística</option>
+                            </select>
+                        </label>
+
+                        <label class="field">
+                            <span>Tema o enfoque</span>
+                            <input id="exam-topic" type="text" placeholder="Ejemplo: ecuaciones, mecánica, variables, guerra fría" />
+                        </label>
+
+                        <div class="multi-row">
+                            <label class="field">
+                                <span>Nivel</span>
+                                <select id="exam-difficulty">
+                                    <option value="facil">Fácil</option>
+                                    <option value="normal" selected>Normal</option>
+                                    <option value="complejo">Complejo</option>
+                                    <option value="dificil">Difícil</option>
+                                    <option value="imposible">Imposible</option>
+                                </select>
+                            </label>
+
+                            <label class="field">
+                                <span>Cantidad</span>
+                                <input id="exam-count" type="number" min="5" max="100" value="10" />
+                            </label>
+                        </div>
+
+                        <input id="exam-api-key" type="hidden" value="TU_CLAVE_QUE_QUIERAS_USAR_AQUI" />
+
+                        <div class="form-actions">
+                            <button class="primary-button" type="submit">Iniciar examen</button>
+                            <button id="btn-config-back" class="ghost-button" type="button">Volver</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section id="playing-view" class="view" aria-label="Examen en curso">
+                <div class="panel playing-panel">
+                    <div class="info-row">
+                        <div class="info-pill">
+                            <span>Tiempo</span>
+                            <strong id="timer">0</strong>
+                        </div>
+                        <div class="info-pill">
+                            <span>Puntaje</span>
+                            <strong id="score">0</strong>
+                        </div>
+                        <div class="info-pill">
+                            <span>Pregunta</span>
+                            <strong id="question-counter">1/10</strong>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <span id="difficulty-badge" class="difficulty-badge">Normal</span>
+                        <h2 id="question-text" class="question-text">Cargando pregunta...</h2>
+                    </div>
+
+                    <div id="options" class="options-list" aria-live="polite"></div>
+
+                    <div class="progress-block">
+                        <div class="progress-track">
+                            <div id="progress-bar" class="progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="exam-exit-row">
+                        <button id="btn-exit-exam" class="ghost-button" type="button">Salir del examen</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="result-view" class="view" aria-label="Resultado del examen">
+                <div class="panel panel-center result-panel">
+                    <h2 class="section-title centered">Examen finalizado</h2>
+                    <div class="result-grid">
+                        <div class="metric-box">
+                            <span>Puntaje</span>
+                            <strong id="final-score">0</strong>
+                        </div>
+                        <div class="metric-box">
+                            <span>Calificación</span>
+                            <strong id="final-grade">0.0</strong>
+                        </div>
+                    </div>
+                    <p id="result-message" class="result-message"></p>
+                    <button id="btn-result-back" class="primary-button" type="button">Volver al menú</button>
+                </div>
+            </section>
+
+            <section id="history-view" class="view" aria-label="Estadísticas">
+                <div class="panel panel-wide">
+                    <h2 class="section-title">Estadísticas</h2>
+                    <div class="history-grid">
+                        <article class="history-card">
+                            <div class="card-title-row">
+                                <h3>Resumen global</h3>
+                            </div>
+                            <div id="global-summary" class="history-list"></div>
+                        </article>
+                        <article class="history-card">
+                            <div class="card-title-row">
+                                <h3>Mi historial</h3>
+                            </div>
+                            <div id="user-history" class="history-list"></div>
+                        </article>
+                    </div>
+                    <div class="form-actions compact-actions">
+                        <button id="btn-history-back" class="ghost-button" type="button">Volver</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="admin-view" class="view" aria-label="Panel de administrador">
+                <div class="panel panel-wide admin-panel">
+                    <div class="admin-header-row">
+                        <div>
+                            <p class="eyebrow">Administrador</p>
+                            <h2 class="section-title">Panel de control</h2>
+                        </div>
+                        <button id="btn-admin-back" class="ghost-button" type="button">Volver</button>
+                    </div>
+
+                    <div class="admin-toolbar">
+                        <button id="btn-reset-leaderboard" class="secondary-button" type="button">Reiniciar tablilla global</button>
+                    </div>
+
+                    <div class="admin-grid">
+                        <article class="history-card">
+                            <div class="card-title-row">
+                                <h3>Usuarios</h3>
+                            </div>
+                            <div id="admin-user-list" class="admin-list"></div>
+                        </article>
+                        <article class="history-card">
+                            <div class="card-title-row">
+                                <h3>Historial</h3>
+                            </div>
+                            <div id="admin-history-list" class="admin-list"></div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

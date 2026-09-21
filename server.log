@@ -1,0 +1,21 @@
+Ôùç injected env (0) from .env // tip: Ôùê secrets for agents [www.dotenvx.com]
+Base de datos conectada: C:\Users\Alejxndro-PC\Downloads\Mathware-Mathware\Mathware-Mathware\data\mathware.db
+Fallo al iniciar servidor: Error: SQLITE_ERROR: table users has no column named role
+--> in Database#run('INSERT INTO users (username, password_hash, salt, role, status, api_key, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)', [
+  'Diego Buitrago',
+  '7bd404ed1f0881c520b8fe946206816cf58c95c7a65830db2e8499c0cce73e22d5d9f6a6b4aaee672042e97dabed5818e2a1080364fc894705d30335ddb41d22',
+  '899b6a6ec1738b2dfce47c6e1a073fde',
+  'admin',
+  'active',
+  '',
+  '2026-08-24T02:09:28.728Z'
+], [Function: onRun])
+    at C:\Users\Alejxndro-PC\Downloads\Mathware-Mathware\Mathware-Mathware\server.js:30:8
+    at new Promise (<anonymous>)
+    at runQuery (C:\Users\Alejxndro-PC\Downloads\Mathware-Mathware\Mathware-Mathware\server.js:29:10)
+    at initDatabase (C:\Users\Alejxndro-PC\Downloads\Mathware-Mathware\Mathware-Mathware\server.js:94:11)
+    at async startServer (C:\Users\Alejxndro-PC\Downloads\Mathware-Mathware\Mathware-Mathware\server.js:500:3) {
+  errno: 1,
+  code: 'SQLITE_ERROR',
+  __augmented: true
+}
