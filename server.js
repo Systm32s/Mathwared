@@ -147,12 +147,6 @@ async function initDatabase() {
 
 app.use(cors());
 app.use(express.json());
-app.use('/api', (req, res, next) => {
-  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.set('Pragma', 'no-cache');
-  res.set('Expires', '0');
-  next();
-});
 
 app.get('/api/health', (req, res) => {
   res.json({ ok: true, message: 'Mathware API funcionando correctamente' });
