@@ -22,7 +22,7 @@ Aplicación web de evaluación académica con autenticación, historial, adminis
    - `ADMIN_USERNAME`
    - `ADMIN_PASSWORD`
    - `GROQ_API_KEY`
-   - `GROQ_MODEL` (opcional; por defecto `llama-3.3-70b-versatile`)
+   - `GROQ_MODEL` (opcional; por defecto `llama-3.1-8b-instant`)
 
 ## Ejecutar localmente
 
