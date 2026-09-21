@@ -10,7 +10,7 @@ const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const SUPABASE_DB_URL = process.env.SUPABASE_DB_URL || '';
 const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
-const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.1-8b-instant';
+const GROQ_MODEL = process.env.GROQ_MODEL || 'auto';
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'change_me_now';
 const sessions = new Map();
@@ -82,6 +82,39 @@ async function getGroqApiKey() {
   if (GROQ_API_KEY) return GROQ_API_KEY;
   const admin = await getQuery('SELECT api_key FROM users WHERE username = ?', [ADMIN_USERNAME]);
   return String(admin?.api_key || '').trim();
+}
+
+async function getGroqModel(apiKey) {
+  const response = await fetch('https://api.groq.com/openai/v1/models', {
+    headers: { Authorization: `Bearer ${apiKey}` }
+  });
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.error?.message || 'No se pudieron consultar los modelos disponibles de Groq');
+  }
+
+  const availableModels = new Set(
+    Array.isArray(data?.data)
+      ? data.data.map((model) => String(model.id || '').trim()).filter(Boolean)
+      : []
+  );
+
+  if (GROQ_MODEL !== 'auto' && availableModels.has(GROQ_MODEL)) {
+    return GROQ_MODEL;
+  }
+
+  const preferredModels = [
+    'openai/gpt-oss-20b',
+    'openai/gpt-oss-120b',
+    'llama-3.3-70b-versatile',
+    'qwen/qwen3-32b',
+    'meta-llama/llama-4-scout-17b-16e-instruct'
+  ];
+  const selectedModel = preferredModels.find((model) => availableModels.has(model));
+
+  if (selectedModel) return selectedModel;
+  throw new Error('La clave de Groq no tiene un modelo de chat compatible disponible. Revisa https://console.groq.com/docs/models');
 }
 
 
@@ -789,6 +822,7 @@ app.post('/api/questions', async (req, res) => {
     if (!groqApiKey) {
       return res.status(503).json({ success: false, message: 'La IA no está configurada. Agrega GROQ_API_KEY en Render o guarda la clave desde el panel de administrador.' });
     }
+    const groqModel = await getGroqModel(groqApiKey);
 
     const prompt = `Genera exactamente ${count} preguntas de opción múltiple en español sobre la materia "${subject}" y el tema que escribió el usuario: "${topic || 'general'}". Usa el tema literalmente, aunque sea raro, absurdo, imaginario o combine ideas inesperadas; no lo reemplaces por un tema distinto ni lo ignores. Si el tema no tiene base real, crea preguntas coherentes dentro de ese contexto. Incluye exactamente cuatro opciones distintas y una sola respuesta correcta por pregunta. Dificultad: ${difficulty}. Devuélvelas solo en JSON puro, sin markdown ni explicaciones. Estructura exacta: [{"question":"...","options":["...","...","...","..."],"correctIndex":0}]`;
 
@@ -799,7 +833,7 @@ app.post('/api/questions', async (req, res) => {
         Authorization: `Bearer ${groqApiKey}`
       },
       body: JSON.stringify({
-        model: GROQ_MODEL,
+        model: groqModel,
         temperature: 0.7,
         messages: [
           {
