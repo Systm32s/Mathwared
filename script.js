@@ -1148,32 +1148,9 @@
             return;
         } catch (error) {
             console.error('Fallo al pedir preguntas al backend:', error);
-        }
-
-        const templates = SUBJECT_TEMPLATES[settings.subject] || SUBJECT_TEMPLATES.matematica;
-        currentExam.questions = [];
-
-        for (let i = 0; i < count; i += 1) {
-            const template = templates[Math.floor(Math.random() * templates.length)];
-            const generated = template(settings.difficulty, settings.topic);
-            const correct = generated.options[Number.isInteger(generated.correctIndex) ? generated.correctIndex : 0];
-            const options = shuffleOptions(generated.options);
-            const correctIndex = options.indexOf(correct);
-            currentExam.questions.push({
-                question: generated.question,
-                options,
-                correctIndex,
-                difficulty: settings.difficulty
-            });
-        }
-
-        if (!currentExam.questions.length) {
-            showToast('No se pudo generar el examen. Inténtalo de nuevo.');
+            showToast(error.message || 'No se pudo conectar con la IA.');
             return;
         }
-
-        showView('playing-view');
-        renderQuestion();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
