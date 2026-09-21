@@ -316,7 +316,11 @@
         async load() {
             const username = AuthSystem.getSession();
             try {
-                const response = await fetch(`${API_BASE}/history${username ? `?username=${encodeURIComponent(username)}` : ''}`, {
+                const query = new URLSearchParams();
+                if (username) query.set('username', username);
+                query.set('_', String(Date.now()));
+                const response = await fetch(`${API_BASE}/history?${query.toString()}`, {
+                    cache: 'no-store',
                     headers: { 'x-session-token': AuthSystem.getSessionToken() }
                 });
                 const result = await response.json();
@@ -329,7 +333,7 @@
 
         async getGlobalSummary() {
             try {
-                const response = await fetch(`${API_BASE}/stats`);
+                const response = await fetch(`${API_BASE}/stats?_=${Date.now()}`, { cache: 'no-store' });
                 const result = await response.json();
                 if (!response.ok) {
                     return { total: 0, average: '0.0', top: [] };
@@ -1067,7 +1071,7 @@
 
         const username = AuthSystem.getSession();
         if (username) {
-            await HistoryStore.saveResult({
+            const saved = await HistoryStore.saveResult({
                 username,
                 subject: currentExam.subject,
                 topic: currentExam.topic || 'general',
@@ -1076,6 +1080,7 @@
                 total,
                 created_at: new Date().toISOString()
             });
+            if (!saved) showToast('El resultado no se pudo guardar en el servidor.');
         }
 
         await renderHistory();
