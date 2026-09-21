@@ -2,15 +2,13 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const sqlite3 = require('sqlite3').verbose();
+const { Pool } = require('pg');
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
-const DB_DIR = path.join(__dirname, 'data');
-const DB_PATH = path.join(DB_DIR, 'mathware.db');
+const SUPABASE_DB_URL = process.env.SUPABASE_DB_URL || '';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'change_me_now';
@@ -25,41 +23,33 @@ function isOwnerUsername(username) {
   return String(username || '').trim() === ADMIN_USERNAME;
 }
 
-fs.mkdirSync(DB_DIR, { recursive: true });
+if (!SUPABASE_DB_URL) {
+  throw new Error('SUPABASE_DB_URL es obligatoria para conectar con Supabase.');
+}
 
-const db = new sqlite3.Database(DB_PATH, (error) => {
-  if (error) {
-    console.error('No se pudo abrir la base de datos:', error.message);
-    process.exit(1);
-  }
-  console.log('Base de datos conectada:', DB_PATH);
+const db = new Pool({
+  connectionString: SUPABASE_DB_URL,
+  ssl: { rejectUnauthorized: false }
 });
 
-function runQuery(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function onRun(error) {
-      if (error) return reject(error);
-      resolve({ id: this.lastID, changes: this.changes });
-    });
-  });
+function postgresQuery(sql) {
+  let index = 0;
+  return sql.replace(/\?/g, () => `$${++index}`);
 }
 
-function getQuery(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.get(sql, params, (error, row) => {
-      if (error) return reject(error);
-      resolve(row || null);
-    });
-  });
+async function runQuery(sql, params = []) {
+  const result = await db.query(postgresQuery(sql), params);
+  return { changes: result.rowCount };
 }
 
-function allQuery(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (error, rows) => {
-      if (error) return reject(error);
-      resolve(rows || []);
-    });
-  });
+async function getQuery(sql, params = []) {
+  const result = await db.query(postgresQuery(sql), params);
+  return result.rows[0] || null;
+}
+
+async function allQuery(sql, params = []) {
+  const result = await db.query(postgresQuery(sql), params);
+  return result.rows;
 }
 
 function hashPassword(password, salt) {
@@ -89,7 +79,10 @@ function getSessionUsername(req) {
 
 
 async function ensureColumn(tableName, columnName, definition) {
-  const columns = await allQuery(`PRAGMA table_info(${tableName})`);
+  const columns = await allQuery(
+    'SELECT column_name AS name FROM information_schema.columns WHERE table_schema = $1 AND table_name = $2',
+    ['public', tableName]
+  );
   if (!columns.some((column) => column.name === columnName)) {
     await runQuery(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${definition}`);
   }
@@ -98,7 +91,7 @@ async function ensureColumn(tableName, columnName, definition) {
 async function initDatabase() {
   await runQuery(`
     CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id BIGSERIAL PRIMARY KEY,
       username TEXT UNIQUE NOT NULL,
       password_hash TEXT NOT NULL,
       salt TEXT NOT NULL,
@@ -112,7 +105,7 @@ async function initDatabase() {
 
   await runQuery(`
     CREATE TABLE IF NOT EXISTS quiz_history (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id BIGSERIAL PRIMARY KEY,
       username TEXT NOT NULL,
       subject TEXT NOT NULL,
       topic TEXT,
