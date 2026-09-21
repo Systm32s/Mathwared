@@ -777,17 +777,11 @@ app.post('/api/questions', async (req, res) => {
     const topic = String(req.body.topic || '').trim();
     const difficulty = String(req.body.difficulty || 'normal').trim();
     const count = Math.min(100, Math.max(5, Number(req.body.count) || 10));
-    const topicRequestsDemoDate = containsDemoDate(topic);
-
     if (!GEMINI_API_KEY) {
-      const topicQuestions = topicFallbackQuestions(topic, count);
-      if (topicQuestions.length) {
-        return res.json({ success: true, questions: topicQuestions });
-      }
-      return res.json({ success: true, questions: fallbackQuestions(subject, topic, difficulty, count) });
+      return res.status(503).json({ success: false, message: 'La IA no está configurada. Agrega GEMINI_API_KEY en Render.' });
     }
 
-    const prompt = `Genera exactamente ${count} preguntas de opción múltiple en español sobre la materia ${subject} y, de forma estricta, sobre el tema "${topic || 'general'}". Cada enunciado debe evaluar conocimientos concretos de ese tema; no uses el tema como una frase decorativa ni lo reemplaces por otro asunto. Todas las opciones también deben guardar relación con el tema. Incluye exactamente cuatro opciones distintas y una sola respuesta inequívocamente correcta. La fecha del 11 de septiembre de 2001 fue solo un ejemplo de demostración: no la menciones ni uses sus variantes (9/11, septiembre de 2001 o 2001) salvo que el usuario la solicite explícitamente como tema. Dificultad: ${difficulty}. Devuélvelas solo en formato JSON puro, sin markdown ni explicaciones. Estructura exacta: [{"question":"...","options":["...","...","...","..."],"correctIndex":0}]`;
+    const prompt = `Genera exactamente ${count} preguntas de opción múltiple en español sobre la materia "${subject}" y el tema que escribió el usuario: "${topic || 'general'}". Usa el tema literalmente, aunque sea raro, absurdo, imaginario o combine ideas inesperadas; no lo reemplaces por un tema distinto ni lo ignores. Si el tema no tiene base real, crea preguntas coherentes dentro de ese contexto. Incluye exactamente cuatro opciones distintas y una sola respuesta correcta por pregunta. Dificultad: ${difficulty}. Devuélvelas solo en JSON puro, sin markdown ni explicaciones. Estructura exacta: [{"question":"...","options":["...","...","...","..."],"correctIndex":0}]`;
 
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
       method: 'POST',
@@ -807,15 +801,13 @@ app.post('/api/questions', async (req, res) => {
     const cleaned = text.replace(/```json|```/g, '').trim();
     const questions = JSON.parse(cleaned);
 
-    if (!Array.isArray(questions) || !questions.length || (!topicRequestsDemoDate && containsDemoDate(cleaned))) {
-      console.warn('Gemini devolvió contenido de demostración; se usará el generador local.');
-      return res.json({ success: true, questions: fallbackQuestions(subject, topic, difficulty, count) });
+    if (!Array.isArray(questions) || !questions.length) {
+      return res.status(502).json({ success: false, message: 'La IA no devolvió preguntas válidas.' });
     }
 
     const validQuestions = normalizeGeneratedQuestions(questions);
-    if (validQuestions.length !== count || (!topicRequestsDemoDate && validQuestions.some((question) => containsDemoDate(JSON.stringify(question))))) {
-      console.warn('Gemini devolvió preguntas inválidas o fuera del contexto; se usará el generador local.');
-      return res.json({ success: true, questions: fallbackQuestions(subject, topic, difficulty, count) });
+    if (validQuestions.length !== count) {
+      return res.status(502).json({ success: false, message: 'La IA no generó la cantidad solicitada de preguntas.' });
     }
 
     return res.json({ success: true, questions: validQuestions });
