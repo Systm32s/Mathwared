@@ -100,6 +100,7 @@
                     <p id="welcome-user" class="menu-greeting">Bienvenido</p>
                     <div class="stacked-actions">
                         <button id="btn-start-exam" class="primary-button" type="button">Generar examen</button>
+                        <button id="btn-motion-simulator" class="secondary-button" type="button">Simulador de movimientos</button>
                         <button id="btn-simulator" class="secondary-button" type="button">Laboratorio de sombras 3D</button>
                         <button id="btn-history" class="secondary-button" type="button">Estadísticas</button>
                         <button id="btn-admin-panel" class="ghost-button admin-button hidden" type="button">Panel de administrador</button>
@@ -117,6 +118,61 @@
                 </div>
             </section>
 
+            <section id="motion-simulator-view" class="view" aria-label="Simulador de movimientos">
+                <div class="panel panel-wide simulator-panel">
+                    <div class="simulator-heading">
+                        <div>
+                            <p class="eyebrow">Laboratorio de física</p>
+                            <h2 class="section-title">Simulador de movimientos</h2>
+                            <p class="simulator-copy">Explora el comportamiento de un sistema, cambia sus variables y observa el resultado.</p>
+                        </div>
+                        <span id="simulation-category" class="difficulty-badge">Cinemática</span>
+                    </div>
+
+                    <div class="simulator-layout">
+                        <form id="simulator-form" class="simulator-controls" novalidate>
+                            <label class="field">
+                                <span>Sistema</span>
+                                <select id="simulation-type">
+                                    <option value="mru">Movimiento rectilíneo uniforme</option>
+                                    <option value="circular">Movimiento circular</option>
+                                    <option value="vertical">Movimiento vertical</option>
+                                    <option value="launch">Lanzamiento vertical</option>
+                                    <option value="freefall">Caída libre</option>
+                                    <option value="parabolic">Movimiento parabólico</option>
+                                    <option value="semiparabolic">Movimiento semiparabólico</option>
+                                    <option value="newton1">Primera ley de Newton</option>
+                                    <option value="newton2">Segunda ley de Newton</option>
+                                    <option value="newton3">Tercera ley de Newton</option>
+                                    <option value="torque">Torque o momento</option>
+                                    <option value="rotational">Equilibrio de rotación</option>
+                                    <option value="gravitycenter">Centro de gravedad</option>
+                                </select>
+                            </label>
+                            <label class="field gravity-field">
+                                <span>Gravedad personalizada <small>(m/s²)</small></span>
+                                <input id="simulation-gravity" type="number" min="0.01" max="30" step="0.01" value="9.81" required />
+                                <small class="field-hint">Límite permitido: 0.01 a 30 m/s²</small>
+                            </label>
+                            <div id="simulation-fields" class="simulation-fields"></div>
+                            <div class="form-actions">
+                                <button class="primary-button" type="submit">Calcular y simular</button>
+                                <button id="btn-motion-simulator-back" class="ghost-button" type="button">Volver</button>
+                            </div>
+                        </form>
+                        <div class="simulation-stage-wrap">
+                            <div class="simulation-stage">
+                                <canvas id="motion-simulation-canvas" width="640" height="360" aria-label="Animación del simulador de movimientos"></canvas>
+                            </div>
+                            <div id="motion-simulation-result" class="simulation-result" aria-live="polite">
+                                <strong>Listo para simular</strong>
+                                <span>Selecciona un sistema y define sus valores.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <section id="simulator-view" class="view" aria-label="Simulador de sombras 3D">
                 <div class="panel panel-wide simulator-panel">
                     <div class="simulator-heading">
@@ -129,7 +185,7 @@
                     </div>
 
                     <div class="simulator-layout">
-                        <form id="simulator-form" class="simulator-controls" novalidate>
+                        <form id="shadow-simulator-form" class="simulator-controls" novalidate>
                             <label class="field shadow-select-field">
                                 <span>Objeto</span>
                                 <select id="shadow-object">
