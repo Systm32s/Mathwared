@@ -134,7 +134,6 @@ button {
 
 .view {
     display: none;
-    animation: fadeUp 0.28s ease;
 }
 
 .view.active {
@@ -266,6 +265,11 @@ button {
 .ghost-button:hover,
 .option-button:hover {
     transform: translateY(-1px);
+}
+
+#btn-go-login,
+#btn-go-register {
+    transition: none;
 }
 
 .auth-form {
