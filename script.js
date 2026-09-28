@@ -1,1955 +1,1543 @@
-:root {
-    --bg: #0b1020;
-    --panel: rgba(18, 24, 38, 0.9);
-    --panel-strong: #111827;
-    --panel-soft: rgba(255, 255, 255, 0.04);
-    --border: rgba(255, 255, 255, 0.08);
-    --text: #e5e7eb;
-    --muted: #9ca3af;
-    --primary: #6ea8fe;
-    --primary-strong: #4f8ef7;
-    --success: #4ade80;
-    --warning: #fbbf24;
-    --danger: #f87171;
-    --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
-    --radius: 24px;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-html, body {
-    margin: 0;
-    min-height: 100%;
-    font-family: 'Inter', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-}
-
-body {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 32px 18px;
-    position: relative;
-    overflow-x: hidden;
-}
-
-button, input, select {
-    font: inherit;
-}
-
-button {
-    cursor: pointer;
-}
-
-.background-blur {
-    position: fixed;
-    width: 420px;
-    height: 420px;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.18;
-    z-index: 0;
-}
-
-.background-blur-a {
-    background: #4f8ef7;
-    left: -80px;
-    top: -40px;
-}
-
-.background-blur-b {
-    background: #8b5cf6;
-    right: -90px;
-    bottom: -30px;
-}
-
-.app-shell {
-    position: relative;
-    z-index: 1;
-    width: min(980px, 100%);
-    min-height: 740px;
-    background: var(--panel);
-    backdrop-filter: blur(14px);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-    border-radius: var(--radius);
-    overflow: hidden;
-}
-
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 28px;
-    border-bottom: 1px solid var(--border);
-    background: rgba(12, 16, 27, 0.82);
-}
-
-.brand-wrap {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.brand-mark,
-.logo-box {
-    width: 42px;
-    height: 42px;
-    display: grid;
-    place-items: center;
-    border-radius: 12px;
-    overflow: hidden;
-    background: linear-gradient(135deg, rgba(110, 168, 254, 0.2), rgba(167, 139, 250, 0.18));
-    border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.brand-mark img,
-.logo-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.brand-name {
-    margin: 0;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-}
-
-.brand-subtitle {
-    margin: 0;
-    font-size: 0.75rem;
-    color: var(--muted);
-}
-
-.viewport {
-    display: block;
-    padding: 28px;
-}
-
-.view {
-    display: none;
-    animation: fadeUp 0.28s ease;
-}
-
-.view.active {
-    display: block;
-}
-
-@keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.panel {
-    background: rgba(17, 24, 39, 0.82);
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    padding: 26px;
-}
-
-.panel-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    min-height: 640px;
-    text-align: center;
-}
-
-.form-panel {
-    max-width: 560px;
-    margin: 0 auto;
-}
-
-.panel-wide {
-    max-width: 860px;
-    margin: 0 auto;
-}
-
-.logo-wrap {
-    margin-bottom: 18px;
-}
-
-.logo-box {
-    width: 86px;
-    height: 86px;
-    border-radius: 24px;
-    box-shadow: 0 16px 32px rgba(79, 142, 247, 0.35);
-    font-size: 2rem;
-}
-
-.hero-title {
-    margin: 0;
-    font-size: clamp(2.2rem, 4vw, 3.6rem);
-    line-height: 1.08;
-    letter-spacing: -0.05em;
-    font-weight: 800;
-}
-
-.hero-title span {
-    display: block;
-    color: var(--primary);
-}
-
-.hero-copy {
-    max-width: 620px;
-    margin: 16px 0 24px;
-    color: var(--muted);
-    line-height: 1.7;
-}
-
-.section-title {
-    margin: 0 0 20px;
-    font-size: clamp(1.8rem, 3vw, 2.5rem);
-    letter-spacing: -0.04em;
-}
-
-.centered {
-    text-align: center;
-}
-
-.cta-row,
-.form-actions,
-.compact-actions {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.admin-button {
-    margin-top: 8px;
-}
-
-.primary-button,
-.secondary-button,
-.ghost-button,
-.option-button {
-    border: 1px solid transparent;
-    border-radius: 14px;
-    padding: 12px 18px;
-    transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
-}
-
-.primary-button {
-    background: linear-gradient(135deg, var(--primary), var(--primary-strong));
-    color: white;
-    box-shadow: 0 14px 30px rgba(79, 142, 247, 0.32);
-}
-
-.secondary-button {
-    background: rgba(255, 255, 255, 0.04);
-    color: var(--text);
-    border-color: var(--border);
-}
-
-.ghost-button {
-    background: transparent;
-    color: var(--text);
-    border-color: var(--border);
-}
-
-.primary-button:hover,
-.secondary-button:hover,
-.ghost-button:hover,
-.option-button:hover {
-    transform: translateY(-1px);
-}
-
-.auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    color: var(--muted);
-}
-
-.field input,
-.field select {
-    width: 100%;
-    background: rgba(8, 15, 25, 0.9);
-    border: 1px solid rgba(91, 164, 255, 0.8);
-    border-radius: 14px;
-    padding: 14px 16px;
-    color: var(--text);
-    outline: none;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    color-scheme: dark;
-}
-
-.field select {
-    background-image:
-        linear-gradient(45deg, transparent 50%, #9ad0ff 50%),
-        linear-gradient(135deg, #9ad0ff 50%, transparent 50%);
-    background-position: calc(100% - 18px) calc(50% - 3px), calc(100% - 12px) calc(50% - 3px);
-    background-size: 6px 6px, 6px 6px;
-    background-repeat: no-repeat;
-    padding-right: 42px;
-}
-
-.field input:focus,
-.field select:focus {
-    border-color: rgba(110, 168, 254, 0.8);
-    box-shadow: 0 0 0 4px rgba(110, 168, 254, 0.12);
-}
-
-.field select option {
-    background: #0d172b;
-    color: #e5e7eb;
-}
-
-.form-error {
-    min-height: 20px;
-    color: var(--danger);
-    font-size: 0.92rem;
-}
-
-.menu-panel {
-    max-width: 620px;
-    margin: 0 auto;
-}
-
-.simulator-panel {
-    max-width: 920px;
-    margin: 0 auto;
-}
-
-.simulator-heading {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 18px;
-    margin-bottom: 22px;
-}
-
-.simulator-copy {
-    margin: -10px 0 0;
-    max-width: 560px;
-    color: var(--muted);
-    line-height: 1.6;
-}
-
-.simulator-layout {
-    display: grid;
-    grid-template-columns: minmax(230px, 0.72fr) minmax(0, 1.28fr);
-    gap: 22px;
-    align-items: start;
-}
-
-.simulator-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.simulation-fields {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-}
-
-.simulation-field {
-    gap: 6px;
-}
-
-.simulation-field small {
-    color: var(--primary);
-}
-
-.gravity-field {
-    padding: 12px;
-    border: 1px solid rgba(110, 168, 254, 0.24);
-    border-radius: 14px;
-    background: rgba(110, 168, 254, 0.05);
-}
-
-.field-hint {
-    color: var(--muted);
-    font-size: 0.76rem;
-}
-
-.simulation-stage-wrap {
-    min-width: 0;
-}
-
-.simulation-stage {
-    overflow: hidden;
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    background: #0c1626;
-    aspect-ratio: 16 / 9;
-    position: relative;
-}
-
-#simulation-canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-    cursor: grab;
-    touch-action: none;
-}
-
-#simulation-canvas:active {
-    cursor: grabbing;
-}
-
-.shadow-live-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    color: #a7f3c3;
-    background: rgba(74, 222, 128, 0.1);
-    border-color: rgba(74, 222, 128, 0.3);
-}
-
-.live-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #4ade80;
-    box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.12);
-}
-
-.shadow-control-group {
-    padding: 13px 14px 14px;
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.025);
-}
-
-.range-heading {
-    display: flex;
-    justify-content: space-between;
-    gap: 14px;
-    margin-bottom: 12px;
-    color: var(--muted);
-    font-size: 0.86rem;
-}
-
-.range-heading output {
-    color: #ffd27d;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-.shadow-range {
-    width: 100%;
-    height: 5px;
-    accent-color: #f6b85c;
-    cursor: pointer;
-}
-
-.shadow-tip {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 12px 13px;
-    border-left: 2px solid #f6b85c;
-    background: rgba(246, 184, 92, 0.08);
-    color: #c5b9a9;
-    font-size: 0.78rem;
-    line-height: 1.45;
-}
-
-.tip-icon {
-    color: #ffd27d;
-    font-size: 1.1rem;
-}
-
-.scene-overlay {
-    position: absolute;
-    top: 14px;
-    left: 16px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 10px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    border-radius: 10px;
-    background: rgba(11, 16, 32, 0.42);
-    backdrop-filter: blur(8px);
-    color: #f5dfb1;
-    font-size: 0.74rem;
-    font-weight: 600;
-}
-
-.sun-glyph {
-    color: #ffd27d;
-    font-size: 1.05rem;
-}
-
-.simulation-result {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-top: 14px;
-    padding: 16px;
-    border-left: 3px solid var(--primary);
-    background: rgba(110, 168, 254, 0.07);
-    color: var(--muted);
-    line-height: 1.5;
-}
-
-.simulation-result strong,
-.simulation-result b {
-    color: var(--text);
-}
-
-.simulation-result b {
-    color: var(--success);
-}
-
-.menu-greeting {
-    font-size: 1.1rem;
-    color: var(--muted);
-    margin: 0 0 22px;
-}
-
-.stacked-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    width: min(320px, 100%);
-}
-
-.stats-summary {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-    width: min(380px, 100%);
-    margin-top: 24px;
-}
-
-.stats-summary > div {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.summary-label {
-    color: var(--muted);
-    font-size: 0.82rem;
-}
-
-.multi-row {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-}
-
-.playing-panel {
-    max-width: 820px;
-    margin: 0 auto;
-}
-
-.info-row {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    margin-bottom: 18px;
-}
-
-.info-pill {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 14px 16px;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    align-items: center;
-}
-
-.info-pill span {
-    color: var(--muted);
-    font-size: 0.82rem;
-}
-
-.question-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 24px 20px;
-    margin-bottom: 18px;
-}
-
-.difficulty-badge {
-    display: inline-block;
-    padding: 7px 10px;
-    background: rgba(110, 168, 254, 0.12);
-    border: 1px solid rgba(110, 168, 254, 0.35);
-    color: var(--primary);
-    border-radius: 999px;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-}
-
-.question-text {
-    margin: 18px 0 0;
-    font-size: clamp(1.3rem, 2vw, 2rem);
-    line-height: 1.5;
-    letter-spacing: -0.03em;
-}
-
-.options-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-}
-
-.option-button {
-    background: rgba(255, 255, 255, 0.03);
-    color: var(--text);
-    border-color: var(--border);
-    text-align: left;
-    min-height: 68px;
-    padding: 18px 16px;
-}
-
-.option-button.correct {
-    background: rgba(74, 222, 128, 0.12);
-    border-color: rgba(74, 222, 128, 0.5);
-    color: #d1fae5;
-}
-
-.option-button.incorrect {
-    background: rgba(248, 113, 113, 0.12);
-    border-color: rgba(248, 113, 113, 0.5);
-    color: #fee2e2;
-}
-
-.option-button.disabled {
-    opacity: 0.85;
-    cursor: default;
-}
-
-.progress-block {
-    margin-top: 22px;
-}
-
-.progress-track {
-    width: 100%;
-    height: 10px;
-    overflow: hidden;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.07);
-}
-
-.progress-fill {
-    height: 100%;
-    width: 0;
-    border-radius: inherit;
-    background: linear-gradient(90deg, var(--primary), #8b5cf6);
-    transition: width 0.25s ease;
-}
-
-.result-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-    width: min(420px, 100%);
-    margin: 24px 0;
-}
-
-.metric-box {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 18px 16px;
-    text-align: center;
-}
-
-.metric-box span {
-    display: block;
-    color: var(--muted);
-    font-size: 0.8rem;
-    margin-bottom: 8px;
-}
-
-.metric-box strong {
-    font-size: clamp(1.7rem, 3vw, 2.4rem);
-    letter-spacing: -0.04em;
-}
-
-.result-message {
-    max-width: 560px;
-    margin: 0 auto 18px;
-    color: var(--muted);
-    line-height: 1.7;
-}
-
-.history-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-}
-
-.history-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 18px;
-}
-
-.card-title-row {
-    margin-bottom: 12px;
-}
-
-.card-title-row h3 {
-    margin: 0;
-    font-size: 1.12rem;
-}
-
-.history-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.history-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 10px 12px;
-}
-
-.history-item strong {
-    display: block;
-    font-size: 0.96rem;
-}
-
-.history-item small {
-    display: block;
-    color: var(--muted);
-    margin-top: 2px;
-}
-
-.exam-exit-row {
-    margin-top: 20px;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.admin-header-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.eyebrow {
-    margin: 0 0 6px;
-    color: var(--primary);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: 0.72rem;
-}
-
-.admin-toolbar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 18px;
-}
-
-.admin-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
-}
-
-.admin-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.admin-row {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.admin-row strong {
-    display: block;
-    font-size: 0.96rem;
-}
-
-.admin-row small {
-    color: var(--muted);
-}
-
-.admin-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.admin-actions button {
-    padding: 7px 10px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.03);
-    color: var(--text);
-    font-size: 0.78rem;
-}
-
-.admin-owner {
-    border-color: rgba(248, 113, 113, 0.4);
-    box-shadow: inset 0 0 0 1px rgba(248, 113, 113, 0.2);
-}
-
-.toast {
-    position: fixed;
-    right: 22px;
-    bottom: 22px;
-    background: rgba(17, 24, 39, 0.96);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px 16px;
-    box-shadow: var(--shadow);
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.2s ease;
-    z-index: 30;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.hidden {
-    display: none !important;
-}
-
-@media (max-width: 720px) {
-    .app-shell {
-        min-height: auto;
+(function () {
+    'use strict';
+
+    const STORAGE_KEYS = {
+        users: 'mathware_users',
+        session: 'mathware_session',
+        records: 'mathware_history',
+        sessionToken: 'mathware_session_token'
+    };
+
+    const DIFFICULTY_SETTINGS = {
+        facil: { label: 'Fácil', secondsPerQuestion: 18, multiplier: 1 },
+        normal: { label: 'Normal', secondsPerQuestion: 24, multiplier: 1.15 },
+        complejo: { label: 'Complejo', secondsPerQuestion: 30, multiplier: 1.35 },
+        dificil: { label: 'Difícil', secondsPerQuestion: 38, multiplier: 1.6 },
+        imposible: { label: 'Imposible', secondsPerQuestion: 46, multiplier: 1.9 }
+    };
+
+    const SUBJECT_TEMPLATES = {
+        matematica: [
+            function (difficulty, topic) {
+                const x = randomInt(2, 12);
+                const y = randomInt(2, 18);
+                const z = randomInt(3, 9);
+                const correct = x * z + y;
+                const question = topic ? `En el tema de ${topic}, resuelve la ecuación ${x}a + ${y} = ${correct}. ¿Cuál es el valor de a?` : `Resuelve la ecuación ${x}a + ${y} = ${correct}. ¿Cuál es el valor de a?`;
+                return { question, options: shuffleOptions([x, x + 1, z, correct]) };
+            },
+            function (difficulty, topic) {
+                const base = randomInt(10, 95);
+                const percent = randomInt(5, 40);
+                const correct = Math.round((base * percent) / 100);
+                const question = topic ? `En ${topic}, ¿cuánto es ${percent}% de ${base}?` : `¿Cuánto es ${percent}% de ${base}?`;
+                return { question, options: shuffleOptions([correct, correct + 5, correct - 7, correct + 12]) };
+            },
+            function (difficulty, topic) {
+                const lado = randomInt(3, 12);
+                const correct = lado * 4;
+                const question = topic ? `En ${topic}, calcula el perímetro de un cuadrado cuyo lado mide ${lado} cm.` : `Calcula el perímetro de un cuadrado cuyo lado mide ${lado} cm.`;
+                return { question, options: shuffleOptions([correct, correct + 3, correct + 8, correct - 4]) };
+            }
+        ],
+        fisica: [
+            function (difficulty, topic) {
+                const v = randomInt(10, 90);
+                const t = randomInt(2, 20);
+                const correct = v * t;
+                const question = topic ? `En ${topic}, un móvil recorre ${v} m/s durante ${t} s. ¿Cuál es la distancia recorrida?` : `Un móvil recorre ${v} m/s durante ${t} s. ¿Cuál es la distancia recorrida?`;
+                return { question, options: shuffleOptions([correct, correct + 12, correct - 18, correct + 32]) };
+            },
+            function (difficulty, topic) {
+                const masa = randomInt(5, 30);
+                const aceleracion = randomInt(2, 12);
+                const correct = masa * aceleracion;
+                const question = topic ? `En ${topic}, calcula la fuerza resultante con masa ${masa} kg y aceleración ${aceleracion} m/s².` : `Calcula la fuerza resultante con masa ${masa} kg y aceleración ${aceleracion} m/s².`;
+                return { question, options: shuffleOptions([correct, correct + 7, correct + 18, correct - 10]) };
+            },
+            function (difficulty, topic) {
+                const potencia = randomInt(50, 250);
+                const tiempo = randomInt(2, 15);
+                const correct = potencia * tiempo;
+                const question = topic ? `En ${topic}, si una máquina consume ${potencia} W durante ${tiempo} s, ¿cuál es el trabajo realizado?` : `Si una máquina consume ${potencia} W durante ${tiempo} s, ¿cuál es el trabajo realizado?`;
+                return { question, options: shuffleOptions([correct, correct + 25, correct - 14, correct + 50]) };
+            }
+        ],
+        quimica: [
+            function (difficulty, topic) {
+                const ph = randomInt(1, 14);
+                const correct = ph;
+                const question = topic ? `En ${topic}, el pH de una solución es ${ph}. ¿Cuál es el valor numérico del pH?` : `El pH de una solución es ${ph}. ¿Cuál es el valor numérico del pH?`;
+                return { question, options: shuffleOptions([correct, correct + 2, correct + 6, correct - 3]) };
+            },
+            function (difficulty, topic) {
+                const mol = randomInt(2, 12);
+                const masa = randomInt(20, 100);
+                const correct = Math.round(masa / mol);
+                const question = topic ? `En ${topic}, si ${masa} g de una sustancia se distribuyen en ${mol} moles, ¿cuál es la masa molar aproximada?` : `Si ${masa} g de una sustancia se distribuyen en ${mol} moles, ¿cuál es la masa molar aproximada?`;
+                return { question, options: shuffleOptions([correct, correct + 5, correct - 3, correct + 10]) };
+            }
+        ],
+        biologia: [
+            function (difficulty, topic) {
+                const correct = 'Mitocondria';
+                const question = topic ? `En ${topic}, ¿qué organelo es conocido como la central energética de la célula?` : '¿Qué organelo es conocido como la central energética de la célula?';
+                return { question, options: shuffleOptions(['Mitocondria', 'Núcleo', 'Membrana', 'Ribosoma']) };
+            },
+            function (difficulty, topic) {
+                const correct = 'Fotosíntesis';
+                const question = topic ? `En ${topic}, ¿qué proceso permite a las plantas convertir energía solar en energía química?` : '¿Qué proceso permite a las plantas convertir energía solar en energía química?';
+                return { question, options: shuffleOptions(['Fotosíntesis', 'Respiración', 'Digestión', 'Fermentación']) };
+            }
+        ],
+        sociales: [
+            function (difficulty, topic) {
+                const correct = 'Constitución';
+                const question = topic ? `En ${topic}, ¿qué documento establece las normas fundamentales de un Estado?` : '¿Qué documento establece las normas fundamentales de un Estado?';
+                return { question, options: shuffleOptions(['Constitución', 'Contrato', 'Ley orgánica', 'Acta']) };
+            },
+            function (difficulty, topic) {
+                const correct = 'Democracia';
+                const question = topic ? `En ${topic}, ¿qué sistema político reconoce el poder del pueblo?` : '¿Qué sistema político reconoce el poder del pueblo?';
+                return { question, options: shuffleOptions(['Democracia', 'Monarquía', 'Autocracia', 'Feudalismo']) };
+            }
+        ],
+        geometria: [
+            function (difficulty, topic) {
+                const lado = randomInt(4, 15);
+                const correct = lado * lado;
+                const question = topic ? `En ${topic}, ¿cuál es el área de un cuadrado cuyo lado mide ${lado} cm?` : `¿Cuál es el área de un cuadrado cuyo lado mide ${lado} cm?`;
+                return { question, options: shuffleOptions([correct, correct + 8, correct + 18, correct - 6]) };
+            },
+            function (difficulty, topic) {
+                const radio = randomInt(3, 12);
+                const correct = Math.PI * radio * radio;
+                const question = topic ? `En ${topic}, ¿cuál es el área aproximada de un círculo de radio ${radio} cm?` : `¿Cuál es el área aproximada de un círculo de radio ${radio} cm?`;
+                return { question, options: shuffleOptions([Math.round(correct), Math.round(correct) + 12, Math.round(correct) - 9, Math.round(correct) + 20]) };
+            }
+        ],
+        informatica: [
+            function (difficulty, topic) {
+                const correct = 'HTML';
+                const question = topic ? `En ${topic}, ¿qué lenguaje se usa principalmente para estructurar páginas web?` : '¿Qué lenguaje se usa principalmente para estructurar páginas web?';
+                return { question, options: shuffleOptions(['HTML', 'SQL', 'CSS', 'JSON']) };
+            },
+            function (difficulty, topic) {
+                const correct = 'CPU';
+                const question = topic ? `En ${topic}, ¿qué componente se encarga del procesamiento de datos en una computadora?` : '¿Qué componente se encarga del procesamiento de datos en una computadora?';
+                return { question, options: shuffleOptions(['CPU', 'RAM', 'Monitor', 'Teclado']) };
+            }
+        ],
+        ingles: [
+            function (difficulty, topic) {
+                const correct = 'Book';
+                const question = topic ? `En ${topic}, ¿cómo se dice "libro" en inglés?` : '¿Cómo se dice "libro" en inglés?';
+                return { question, options: shuffleOptions(['Book', 'Table', 'Water', 'Door']) };
+            },
+            function (difficulty, topic) {
+                const correct = 'Teacher';
+                const question = topic ? `En ${topic}, ¿cómo se dice "profesor" en inglés?` : '¿Cómo se dice "profesor" en inglés?';
+                return { question, options: shuffleOptions(['Teacher', 'Student', 'School', 'Chair']) };
+            }
+        ],
+        estadistica: [
+            function (difficulty, topic) {
+                const correct = 'Media';
+                const question = topic ? `En ${topic}, ¿cómo se llama el promedio de un conjunto de datos?` : '¿Cómo se llama el promedio de un conjunto de datos?';
+                return { question, options: shuffleOptions(['Media', 'Moda', 'Rango', 'Mediana']) };
+            },
+            function (difficulty, topic) {
+                const correct = 'Mediana';
+                const question = topic ? `En ${topic}, ¿qué medida estadística representa el valor central en un conjunto ordenado?` : '¿Qué medida estadística representa el valor central en un conjunto ordenado?';
+                return { question, options: shuffleOptions(['Mediana', 'Varianza', 'Moda', 'Desviación']) };
+            }
+        ],
+        lenguaje: [
+            function (difficulty, topic) {
+                const correct = 'Sinónimo';
+                const question = topic ? `En ${topic}, ¿cómo se llama la palabra que tiene un significado parecido a otra?` : '¿Cómo se llama la palabra que tiene un significado parecido a otra?';
+                return { question, options: shuffleOptions(['Sinónimo', 'Antónimo', 'Homónimo', 'Pronombre']) };
+            },
+            function (difficulty, topic) {
+                const correct = 'Artículo';
+                const question = topic ? `En ${topic}, ¿qué clase de palabra acompaña al sustantivo y puede ser definido o indefinido?` : '¿Qué clase de palabra acompaña al sustantivo y puede ser definido o indefinido?';
+                return { question, options: shuffleOptions(['Artículo', 'Verbo', 'Adverbio', 'Preposición']) };
+            }
+        ],
+        'lectura critica': [
+            function (difficulty, topic) {
+                const correct = 'Analizar';
+                const question = topic ? `En ${topic}, ¿qué acción implica interpretar y evaluar críticamente un texto?` : '¿Qué acción implica interpretar y evaluar críticamente un texto?';
+                return { question, options: shuffleOptions(['Analizar', 'Memorizar', 'Copiar', 'Etiquetar']) };
+            },
+            function (difficulty, topic) {
+                const correct = 'Idea principal';
+                const question = topic ? `En ${topic}, ¿qué elemento del texto resume la intención central del autor?` : '¿Qué elemento del texto resume la intención central del autor?';
+                return { question, options: shuffleOptions(['Idea principal', 'Detalle superficial', 'Título vacío', 'Conclusión improvisada']) };
+            }
+        ],
+        filosofia: [
+            function (difficulty, topic) {
+                const correct = 'Racional';
+                const question = topic ? `En ${topic}, ¿qué tipo de conocimiento busca explicar la realidad mediante la razón?` : '¿Qué tipo de conocimiento busca explicar la realidad mediante la razón?';
+                return { question, options: shuffleOptions(['Racional', 'Empírico', 'Instintivo', 'Visual']) };
+            },
+            function (difficulty, topic) {
+                const correct = 'Verdad';
+                const question = topic ? `En ${topic}, ¿qué concepto filosófico se refiere a la correspondencia entre lo pensado y la realidad?` : '¿Qué concepto filosófico se refiere a la correspondencia entre lo pensado y la realidad?';
+                return { question, options: shuffleOptions(['Verdad', 'Opinión', 'Confirmación', 'Pista']) };
+            }
+        ],
+        'competencia ciudadana': [
+            function (difficulty, topic) {
+                const correct = 'Participación';
+                const question = topic ? `En ${topic}, ¿qué valor se fortalece cuando una persona interviene en asuntos colectivos y democráticos?` : '¿Qué valor se fortalece cuando una persona interviene en asuntos colectivos y democráticos?';
+                return { question, options: shuffleOptions(['Participación', 'Aislamiento', 'Privacidad', 'Desorden']) };
+            },
+            function (difficulty, topic) {
+                const correct = 'Derechos';
+                const question = topic ? `En ${topic}, ¿qué conjunto de garantías fundamentales deben ser respetados por todas las personas?` : '¿Qué conjunto de garantías fundamentales deben ser respetados por todas las personas?';
+                return { question, options: shuffleOptions(['Derechos', 'Intereses', 'Votos', 'Costumbres']) };
+            }
+        ],
+        'economia politica': [
+            function (difficulty, topic) {
+                const correct = 'Oferta';
+                const question = topic ? `En ${topic}, ¿cómo se denomina la cantidad de bienes o servicios que los productores están dispuestos a vender?` : '¿Cómo se denomina la cantidad de bienes o servicios que los productores están dispuestos a vender?';
+                return { question, options: shuffleOptions(['Demanda', 'Oferta', 'Costo fijo', 'Inversión']) };
+            },
+            function (difficulty, topic) {
+                const correct = 'Inflación';
+                const question = topic ? `En ${topic}, ¿qué fenómeno económico refleja el aumento sostenido de precios en una economía?` : '¿Qué fenómeno económico refleja el aumento sostenido de precios en una economía?';
+                return { question, options: shuffleOptions(['Inflación', 'Deflación', 'Mercado', 'Balance']) };
+            }
+        ],
+        'educacion fisica': [
+            function (difficulty, topic) {
+                const correct = 'Resistencia';
+                const question = topic ? `En ${topic}, ¿qué capacidad física permite mantener esfuerzo durante más tiempo?` : '¿Qué capacidad física permite mantener esfuerzo durante más tiempo?';
+                return { question, options: shuffleOptions(['Resistencia', 'Velocidad', 'Flexibilidad', 'Coordinación']) };
+            },
+            function (difficulty, topic) {
+                const correct = 'Calentamiento';
+                const question = topic ? `En ${topic}, ¿qué etapa del ejercicio prepara el cuerpo antes de la actividad intensa?` : '¿Qué etapa del ejercicio prepara el cuerpo antes de la actividad intensa?';
+                return { question, options: shuffleOptions(['Calentamiento', 'Recuperación', 'Reposo', 'Competencia']) };
+            }
+        ]
+    };
+
+    const API_BASE = (typeof window !== 'undefined' && window.location && window.location.origin)
+        ? `${window.location.origin}/api`
+        : 'http://localhost:3000/api';
+    const ADMIN_USERNAME = 'Diego Buitrago';
+
+    const AuthSystem = {
+        async register(username, password) {
+            const cleanUser = String(username || '').trim();
+            if (cleanUser.length < 3) {
+                return { success: false, message: 'El usuario debe tener al menos 3 caracteres.' };
+            }
+            if (!/^[a-zA-Z0-9_]+$/.test(cleanUser)) {
+                return { success: false, message: 'El usuario solo puede contener letras, números y guion bajo.' };
+            }
+            if (String(password || '').length < 4) {
+                return { success: false, message: 'La contraseña debe tener al menos 4 caracteres.' };
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: cleanUser, password })
+                });
+                const result = await response.json();
+                if (!response.ok) {
+                    return { success: false, message: result.message || 'No se pudo registrar.' };
+                }
+                return { success: true, message: result.message };
+            } catch (error) {
+                return { success: false, message: 'No se pudo conectar con el servidor.' };
+            }
+        },
+
+        async login(username, password) {
+            const cleanUser = String(username || '').trim();
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: cleanUser, password })
+                });
+                const result = await response.json();
+                if (!response.ok) {
+                    return { success: false, message: result.message || 'Usuario o contraseña incorrectos.' };
+                }
+                localStorage.setItem(STORAGE_KEYS.session, cleanUser);
+                localStorage.setItem(STORAGE_KEYS.sessionToken, result.sessionToken || '');
+                localStorage.setItem('mathware_role', result.role || 'user');
+                return { success: true, user: cleanUser, role: result.role || 'user' };
+            } catch (error) {
+                return { success: false, message: 'No se pudo conectar con el servidor.' };
+            }
+        },
+
+        logout() {
+            localStorage.removeItem(STORAGE_KEYS.session);
+            localStorage.removeItem(STORAGE_KEYS.sessionToken);
+            localStorage.removeItem('mathware_role');
+        },
+
+        getSession() {
+            return localStorage.getItem(STORAGE_KEYS.session);
+        },
+
+        getRole() {
+            return localStorage.getItem('mathware_role') || 'user';
+        },
+
+        getSessionToken() {
+            return localStorage.getItem(STORAGE_KEYS.sessionToken) || '';
+        },
+
+        isLoggedIn() {
+            return Boolean(this.getSession() && this.getSessionToken());
+        },
+
+        isOwner() {
+            return this.isLoggedIn() && this.getSession() === ADMIN_USERNAME;
+        },
+
+        isAdmin() {
+            return this.isOwner() || this.getRole() === 'admin';
+        }
+    };
+
+    const HistoryStore = {
+        async load() {
+            const username = AuthSystem.getSession();
+            try {
+                const query = new URLSearchParams();
+                if (username) query.set('username', username);
+                query.set('_', String(Date.now()));
+                const response = await fetch(`${API_BASE}/history?${query.toString()}`, {
+                    cache: 'no-store',
+                    headers: { 'x-session-token': AuthSystem.getSessionToken() }
+                });
+                const result = await response.json();
+                if (!response.ok) return [];
+                return Array.isArray(result.history) ? result.history : [];
+            } catch (error) {
+                return [];
+            }
+        },
+
+        async getGlobalSummary() {
+            try {
+                const response = await fetch(`${API_BASE}/stats?_=${Date.now()}`, { cache: 'no-store' });
+                const result = await response.json();
+                if (!response.ok) {
+                    return { total: 0, average: '0.0', top: [] };
+                }
+                return {
+                    total: Number(result.total || 0),
+                    average: String(result.average || '0.0'),
+                    top: Array.isArray(result.top) ? result.top : []
+                };
+            } catch (error) {
+                return { total: 0, average: '0.0', top: [] };
+            }
+        },
+
+        async saveResult(record) {
+            try {
+                const response = await fetch(`${API_BASE}/history`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'x-session-token': AuthSystem.getSessionToken() },
+                    body: JSON.stringify(record)
+                });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        },
+
+        async clear() {
+            try {
+                const response = await fetch(`${API_BASE}/history`, {
+                    method: 'DELETE',
+                    headers: { 'x-session-token': AuthSystem.getSessionToken() }
+                });
+                const result = await response.json();
+                return response.ok && Boolean(result.success);
+            } catch (error) {
+                return false;
+            }
+        }
+    };
+
+    let currentExam = {
+        subject: 'matematicas',
+        topic: '',
+        difficulty: 'normal',
+        count: 10,
+        questions: [],
+        currentIndex: 0,
+        score: 0,
+        startedAt: 0,
+        timeLimit: 0,
+        timerId: null,
+        timeRemaining: 0
+    };
+
+    function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    .info-row,
-    .multi-row,
-    .history-grid,
-    .options-list,
-    .result-grid,
-    .simulator-layout {
-        grid-template-columns: 1fr;
+    function shuffleOptions(options) {
+        const arr = [...options];
+        for (let i = arr.length - 1; i > 0; i -= 1) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
     }
 
-    .simulation-fields {
-        grid-template-columns: 1fr;
+    function makeSalt() {
+        return Array.from({ length: 16 }, () => Math.random().toString(16).slice(2, 3)).join('');
     }
 
-    .simulator-heading {
-        flex-direction: column;
+    function hashPassword(password, salt) {
+        let hash = 0;
+        for (let i = 0; i < password.length; i += 1) {
+            hash = (hash * 31 + password.charCodeAt(i) + salt.charCodeAt(i % salt.length).charCodeAt(0)) >>> 0;
+        }
+        return hash.toString(16);
     }
 
-    .topbar {
-        padding: 16px 18px;
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        if (!toast) return;
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => toast.classList.remove('show'), 2200);
     }
 
-    .viewport {
-        padding: 18px;
+    function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>'"]/g, (character) => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        }[character]));
     }
 
-    .panel {
-        padding: 18px;
+    function showView(viewId) {
+        const views = document.querySelectorAll('.view');
+        views.forEach((view) => view.classList.remove('active'));
+        const target = document.getElementById(viewId);
+        if (target) {
+            target.classList.add('active');
+        }
     }
 
-    .panel-center {
-        min-height: 520px;
+    const SIMULATION_DEFINITIONS = {
+        mru: { category: 'Cinemática', fields: [['velocity', 'Velocidad', 20, 'm/s'], ['time', 'Tiempo', 5, 's']], calculate: ({ velocity, time }) => ({ title: 'Movimiento rectilíneo uniforme', formula: 'x = v · t', values: `x = ${velocity} · ${time}`, result: `Distancia: ${(velocity * time).toFixed(2)} m`, path: 'line' }) },
+        circular: { category: 'Cinemática', fields: [['radius', 'Radio', 3, 'm'], ['angularVelocity', 'Velocidad angular', 2, 'rad/s'], ['time', 'Tiempo', 5, 's']], calculate: ({ radius, angularVelocity, time }) => ({ title: 'Movimiento circular', formula: 'θ = ω · t', values: `θ = ${angularVelocity} · ${time}`, result: `Ángulo: ${(angularVelocity * time).toFixed(2)} rad · Velocidad lineal: ${(radius * angularVelocity).toFixed(2)} m/s · Período: ${(2 * Math.PI / Math.max(0.01, Math.abs(angularVelocity))).toFixed(2)} s`, path: 'circle' }) },
+        vertical: { category: 'Cinemática', fields: [['initialHeight', 'Altura inicial', 20, 'm'], ['initialVelocity', 'Velocidad inicial', 0, 'm/s'], ['time', 'Tiempo', 2, 's']], calculate: ({ initialHeight, initialVelocity, time, gravity }) => ({ title: 'Movimiento vertical', formula: 'y = y₀ + v₀t − ½gt²', values: `y = ${initialHeight} + ${initialVelocity}(${time}) − ½(${gravity})(${time})²`, result: `Altura: ${Math.max(0, initialHeight + initialVelocity * time - 0.5 * gravity * time * time).toFixed(2)} m`, path: 'vertical' }) },
+        launch: { category: 'Cinemática', fields: [['initialVelocity', 'Velocidad de lanzamiento', 18, 'm/s']], calculate: ({ initialVelocity, gravity }) => ({ title: 'Lanzamiento vertical', formula: 'hₘₐₓ = v₀² / 2g', values: `hₘₐₓ = ${initialVelocity}² / (2 · ${gravity})`, result: `Altura máxima: ${(initialVelocity * initialVelocity / (2 * gravity)).toFixed(2)} m · Tiempo total: ${(2 * initialVelocity / gravity).toFixed(2)} s`, path: 'vertical' }) },
+        freefall: { category: 'Cinemática', fields: [['height', 'Altura', 30, 'm'], ['time', 'Tiempo', 2, 's']], calculate: ({ height, time, gravity }) => { const impactTime = Math.sqrt(2 * height / gravity); const effectiveTime = Math.min(time, impactTime); return { title: 'Caída libre', formula: 'v = gt', values: `v = ${gravity} · ${effectiveTime.toFixed(2)}`, result: `Velocidad: ${(gravity * effectiveTime).toFixed(2)} m/s · Distancia: ${(0.5 * gravity * effectiveTime * effectiveTime).toFixed(2)} m · Tiempo de impacto: ${impactTime.toFixed(2)} s`, path: 'fall' }; } },
+        parabolic: { category: 'Cinemática', fields: [['initialVelocity', 'Velocidad inicial', 20, 'm/s'], ['angle', 'Ángulo', 45, '°']], calculate: ({ initialVelocity, angle, gravity }) => { const radians = angle * Math.PI / 180; return { title: 'Movimiento parabólico', formula: 'R = v₀² sin(2θ) / g', values: `R = ${initialVelocity}² · sin(2 · ${angle}°) / ${gravity}`, result: `Alcance: ${(initialVelocity * initialVelocity * Math.sin(2 * radians) / gravity).toFixed(2)} m · Altura máxima: ${(initialVelocity * initialVelocity * Math.sin(radians) ** 2 / (2 * gravity)).toFixed(2)} m`, path: 'parabola' }; } },
+        semiparabolic: { category: 'Cinemática', fields: [['height', 'Altura', 20, 'm'], ['horizontalVelocity', 'Velocidad horizontal', 8, 'm/s']], calculate: ({ height, horizontalVelocity, gravity }) => ({ title: 'Movimiento semiparabólico', formula: 'x = vₓ · √(2h/g)', values: `x = ${horizontalVelocity} · √(2 · ${height} / ${gravity})`, result: `Tiempo de caída: ${Math.sqrt(2 * height / gravity).toFixed(2)} s · Alcance: ${(horizontalVelocity * Math.sqrt(2 * height / gravity)).toFixed(2)} m`, path: 'parabola' }) },
+        newton1: { category: 'Dinámica', fields: [['mass', 'Masa', 5, 'kg'], ['force', 'Fuerza neta', 0, 'N']], calculate: ({ force }) => ({ title: 'Primera ley de Newton', formula: 'ΣF = 0 → v constante', values: `ΣF = ${force} N`, result: force === 0 ? 'El cuerpo permanece en reposo o con velocidad constante.' : `Existe una fuerza neta de ${force.toFixed(2)} N.`, path: 'force' }) },
+        newton2: { category: 'Dinámica', fields: [['mass', 'Masa', 5, 'kg'], ['force', 'Fuerza neta', 20, 'N']], calculate: ({ mass, force }) => ({ title: 'Segunda ley de Newton', formula: 'a = F / m', values: `a = ${force} / ${mass}`, result: `Aceleración: ${(force / mass).toFixed(2)} m/s²`, path: 'force' }) },
+        newton3: { category: 'Dinámica', fields: [['force', 'Fuerza de acción', 30, 'N']], calculate: ({ force }) => ({ title: 'Tercera ley de Newton', formula: 'Fₐᵦ = −Fᵦₐ', values: `F reacción = −${force}`, result: `Acción: ${force.toFixed(2)} N · Reacción: ${(-force).toFixed(2)} N`, path: 'force' }) },
+        torque: { category: 'Estática', fields: [['force', 'Fuerza', 40, 'N'], ['distance', 'Brazo de palanca', 0.5, 'm'], ['angle', 'Ángulo', 90, '°']], calculate: ({ force, distance, angle }) => ({ title: 'Torque o momento', formula: 'τ = rF sin(θ)', values: `τ = ${distance} · ${force} · sin(${angle}°)`, result: `Momento: ${(distance * force * Math.sin(angle * Math.PI / 180)).toFixed(2)} N·m`, path: 'torque' }) },
+        rotational: { category: 'Estática', fields: [['forceA', 'Fuerza 1', 20, 'N'], ['distanceA', 'Brazo 1', 2, 'm'], ['distanceB', 'Brazo 2', 1, 'm']], calculate: ({ forceA, distanceA, distanceB }) => ({ title: 'Equilibrio de rotación', formula: 'Στ = 0 → F₁r₁ = F₂r₂', values: `F₂ = ${forceA} · ${distanceA} / ${distanceB}`, result: `Fuerza equilibrante: ${(forceA * distanceA / distanceB).toFixed(2)} N`, path: 'torque' }) },
+        gravitycenter: { category: 'Estática', fields: [['massA', 'Masa A', 2, 'kg'], ['positionA', 'Posición A', 0, 'm'], ['massB', 'Masa B', 4, 'kg'], ['positionB', 'Posición B', 3, 'm']], calculate: ({ massA, positionA, massB, positionB }) => ({ title: 'Centro de gravedad', formula: 'xᶜᵍ = Σ(mx) / Σm', values: `xᶜᵍ = (${massA}·${positionA} + ${massB}·${positionB}) / (${massA} + ${massB})`, result: `Centro de gravedad: ${((massA * positionA + massB * positionB) / (massA + massB)).toFixed(2)} m`, path: 'center' }) }
+    };
+
+    function renderSimulationFields() {
+        const type = document.getElementById('simulation-type').value;
+        const definition = SIMULATION_DEFINITIONS[type];
+        const fields = document.getElementById('simulation-fields');
+        const category = document.getElementById('simulation-category');
+        if (!definition || !fields) return;
+        if (category) category.textContent = definition.category;
+        fields.innerHTML = definition.fields.map(([id, label, value, unit]) => `<label class="field simulation-field"><span>${label} <small>(${unit})</small></span><input id="simulation-${id}" data-simulation-input="${id}" type="number" step="any" value="${value}" required /></label>`).join('');
     }
-}
-.strength-fill[data-strength="1"] { 
-    width: 20%; 
-    background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%); 
-}
-.strength-fill[data-strength="2"] { 
-    width: 40%; 
-    background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%); 
-}
-.strength-fill[data-strength="3"] { 
-    width: 60%; 
-    background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%); 
-}
-.strength-fill[data-strength="4"] { 
-    width: 80%; 
-    background: linear-gradient(90deg, #84cc16 0%, #65a30d 100%); 
-}
-.strength-fill[data-strength="5"] { 
-    width: 100%; 
-    background: linear-gradient(90deg, #4ade80 0%, #22c55e 100%); 
-}
 
-.strength-text {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    font-weight: 500;
-}
-
-.btn {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 18px 40px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    background: var(--bg-card);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    transition: all var(--transition-medium);
-    font-family: 'Poppins', sans-serif;
-    overflow: hidden;
-    min-width: 280px;
-    text-decoration: none;
-    user-select: none;
-}
-
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--primary-gradient);
-    opacity: 0;
-    transition: opacity var(--transition-medium);
-    z-index: -1;
-}
-
-.btn:hover::before {
-    opacity: 1;
-}
-
-.btn:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
-    border-color: transparent;
-}
-
-.btn:active {
-    transform: translateY(-1px);
-}
-
-.btn:focus-visible {
-    outline: 3px solid rgba(102, 126, 234, 0.5);
-    outline-offset: 2px;
-}
-
-.btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-.btn-icon {
-    font-size: 1.5rem;
-    flex-shrink: 0;
-}
-
-.btn-primary {
-    background: var(--primary-gradient);
-    border: none;
-    box-shadow: var(--shadow-md);
-}
-
-.btn-primary:hover {
-    box-shadow: var(--shadow-lg), var(--shadow-glow);
-    transform: translateY(-3px) scale(1.02);
-}
-
-.btn-secondary {
-    background: var(--success-gradient);
-    border: none;
-}
-
-.btn-secondary:hover {
-    box-shadow: var(--shadow-lg), var(--shadow-glow-success);
-    transform: translateY(-3px) scale(1.02);
-}
-
-.btn-tertiary {
-    background: var(--secondary-gradient);
-    border: none;
-}
-
-.btn-danger-outline {
-    background: transparent;
-    border: 2px solid #fa709a;
-    color: #fa709a;
-}
-
-.btn-danger-outline:hover {
-    background: var(--danger-gradient);
-    color: white;
-    border-color: transparent;
-}
-
-.btn-back {
-    position: absolute;
-    bottom: 30px;
-    left: 30px;
-    min-width: 180px;
-    font-size: 1rem;
-}
-
-.btn-back-auth {
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    color: var(--text-secondary);
-    min-width: 150px;
-}
-
-.btn-back-auth:hover {
-    background: var(--bg-card-hover);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-.full-width {
-    width: 100%;
-}
-
-.btn.loading {
-    pointer-events: none;
-    position: relative;
-}
-
-.btn-loader {
-    display: none;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-}
-
-.btn.loading .btn-loader {
-    display: inline-block;
-}
-
-.btn.loading .btn-text {
-    opacity: 0.7;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-.btn.success-flash {
-    animation: successPulse 0.5s var(--transition-medium);
-}
-
-.btn.error-flash {
-    animation: errorShake 0.5s var(--transition-medium);
-}
-
-@keyframes successPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); background: var(--success-gradient); }
-}
-
-@keyframes errorShake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    75% { transform: translateX(10px); }
-}
-
-.menu-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-    max-width: 400px;
-}
-
-.theme-buttons {
-    display: grid;
-    gap: 20px;
-    width: 100%;
-    max-width: 600px;
-}
-
-.auth-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100%;
-    max-width: 400px;
-    margin-top: 40px;
-}
-
-.auth-form {
-    width: 100%;
-    max-width: 450px;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-#playing-view {
-    position: relative;
-    padding: 80px 20px 20px;
-}
-
-.game-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto 40px;
-    gap: 20px;
-}
-
-.stat-card {
-    flex: 0 1 280px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 18px 22px;
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all var(--transition-medium);
-}
-
-.stat-card:hover {
-    background: var(--bg-card-hover);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
-}
-
-.stat-icon {
-    font-size: 2rem;
-    flex-shrink: 0;
-}
-
-.stat-content {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.stat-label {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.stat-value {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-.btn-pause-corner {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: var(--radius-md);
-    font-size: 1.4rem;
-    cursor: pointer;
-    transition: all var(--transition-medium);
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.btn-pause-corner:hover {
-    background: var(--primary-gradient);
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-    border-color: transparent;
-}
-
-.btn-pause-corner:active {
-    transform: scale(0.95);
-}
-
-.progress-container {
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto 30px;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    width: 5%;
-    background: var(--success-gradient);
-    border-radius: var(--radius-full);
-    transition: width 0.5s var(--transition-medium);
-}
-
-.question-card {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 40px;
-    border-radius: var(--radius-lg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto 30px;
-    text-align: center;
-    position: relative;
-    box-shadow: var(--shadow-md);
-}
-
-.difficulty-badge {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    padding: 8px 16px;
-    border-radius: var(--radius-full);
-    font-size: 0.85rem;
-    font-weight: 600;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.question-text {
-    font-size: 1.8rem;
-    font-weight: 600;
-    line-height: 1.4;
-    color: var(--text-primary);
-}
-
-.options-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.option-btn {
-    padding: 25px 20px;
-    font-size: 1.2rem;
-    font-weight: 500;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-md);
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: all var(--transition-medium);
-    font-family: 'Poppins', sans-serif;
-    text-align: center;
-    min-height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.option-btn:hover:not(.disabled) {
-    background: var(--bg-card-hover);
-    transform: translateY(-3px);
-    border-color: #667eea;
-    box-shadow: var(--shadow-md);
-}
-
-.option-btn.correct {
-    background: var(--success-gradient);
-    border-color: transparent;
-    animation: pulse 0.6s ease;
-}
-
-.option-btn.incorrect {
-    background: var(--danger-gradient);
-    border-color: transparent;
-    animation: shake 0.5s ease;
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-10px); }
-    75% { transform: translateX(10px); }
-}
-
-.option-btn.disabled {
-    pointer-events: none;
-    opacity: 0.6;
-}
-
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: var(--z-modal-backdrop);
-    animation: fadeIn 0.3s ease;
-}
-
-.overlay.active {
-    display: flex;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.modal-card {
-    background: var(--bg-secondary);
-    padding: 50px;
-    border-radius: var(--radius-lg);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    max-width: 500px;
-    width: 90%;
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    animation: scaleIn 0.4s var(--transition-medium);
-    position: relative;
-    z-index: var(--z-modal);
-}
-
-.modal-icon {
-    font-size: 4rem;
-    margin-bottom: 20px;
-}
-
-.modal-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 15px;
-}
-
-.modal-text {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    margin-bottom: 30px;
-    line-height: 1.6;
-}
-
-.modal-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-#result-view {
-    padding: 40px 0;
-}
-
-.result-container {
-    text-align: center;
-    max-width: 700px;
-    width: 100%;
-    margin: 0 auto;
-}
-
-.result-icon {
-    font-size: 6rem;
-    margin-bottom: 20px;
-    animation: bounceIn 0.8s ease;
-}
-
-@keyframes bounceIn {
-    0%, 20%, 40%, 60%, 80%, 100% { 
-        animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000); 
+    function drawSimulationLegacy(result) {
+        const canvas = document.getElementById('simulation-canvas');
+        if (!canvas) return;
+        const context = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        let frame = 0;
+        cancelAnimationFrame(drawSimulation.animationId);
+        const draw = () => {
+            const time = frame / 60;
+            const progress = (Math.sin(time * 1.8) + 1) / 2;
+            context.clearRect(0, 0, width, height);
+            context.fillStyle = '#0c1626';
+            context.fillRect(0, 0, width, height);
+            context.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+            context.lineWidth = 1;
+            for (let x = 0; x <= width; x += 40) { context.beginPath(); context.moveTo(x, 0); context.lineTo(x, height); context.stroke(); }
+            for (let y = 0; y <= height; y += 40) { context.beginPath(); context.moveTo(0, y); context.lineTo(width, y); context.stroke(); }
+            context.strokeStyle = '#6ea8fe'; context.lineWidth = 3; context.fillStyle = '#fbbf24';
+            if (result.path === 'circle') { context.beginPath(); context.arc(width / 2, height / 2, 100, 0, Math.PI * 2); context.stroke(); context.beginPath(); context.arc(width / 2 + Math.cos(time) * 100, height / 2 + Math.sin(time) * 100, 10, 0, Math.PI * 2); context.fill(); }
+            else if (result.path === 'parabola') { context.beginPath(); context.moveTo(40, height - 35); context.quadraticCurveTo(width / 2, 40, width - 40, height - 35); context.stroke(); context.beginPath(); context.arc(40 + progress * (width - 80), height - 35 - Math.sin(progress * Math.PI) * 230, 10, 0, Math.PI * 2); context.fill(); }
+            else if (result.path === 'vertical' || result.path === 'fall') { const y = 35 + progress * (height - 70); context.beginPath(); context.moveTo(width / 2, 20); context.lineTo(width / 2, height - 20); context.stroke(); context.beginPath(); context.arc(width / 2, y, 12, 0, Math.PI * 2); context.fill(); }
+            else if (result.path === 'torque') { context.beginPath(); context.moveTo(width / 2 - 150, height / 2); context.lineTo(width / 2 + 150, height / 2); context.stroke(); context.beginPath(); context.arc(width / 2, height / 2, 14, 0, Math.PI * 2); context.fill(); context.beginPath(); context.arc(width / 2, height / 2, 80, -0.8, 0.8); context.stroke(); }
+            else if (result.path === 'center') { context.fillStyle = '#6ea8fe'; context.fillRect(110, height / 2 - 18, 420, 36); context.fillStyle = '#fbbf24'; context.beginPath(); context.arc(320 + Math.sin(time) * 35, height / 2, 12, 0, Math.PI * 2); context.fill(); }
+            else if (result.path === 'force') { context.beginPath(); context.moveTo(120, height / 2); context.lineTo(520, height / 2); context.stroke(); context.beginPath(); context.moveTo(520, height / 2); context.lineTo(490, height / 2 - 18); context.lineTo(490, height / 2 + 18); context.closePath(); context.fill(); }
+            else { const x = 45 + progress * (width - 90); context.beginPath(); context.moveTo(40, height - 45); context.lineTo(width - 40, height - 45); context.stroke(); context.beginPath(); context.arc(x, height - 57, 12, 0, Math.PI * 2); context.fill(); }
+            frame += 1;
+            drawSimulation.animationId = requestAnimationFrame(draw);
+        };
+        draw();
     }
-    0% { 
-        opacity: 0; 
-        transform: scale3d(.3, .3, .3); 
+
+    function createSimulationMotion(type, values) {
+        const gravity = values.gravity || 9.81;
+        if (type === 'mru') return { kind: 'line', duration: Math.max(0.01, values.time), distance: values.velocity * values.time, velocity: values.velocity };
+        if (type === 'circular') return { kind: 'circle', duration: Math.max(0.01, values.time), radius: values.radius, angularVelocity: values.angularVelocity };
+        if (type === 'vertical') return { kind: 'vertical', duration: Math.max(0.01, values.time), height: values.initialHeight, initialHeight: values.initialHeight, initialVelocity: values.initialVelocity, gravity };
+        if (type === 'launch') return { kind: 'vertical', duration: Math.max(0.01, 2 * values.initialVelocity / gravity), height: 0, initialHeight: 0, initialVelocity: values.initialVelocity, gravity };
+        if (type === 'freefall') return { kind: 'vertical', duration: Math.max(0.01, values.time), height: values.height, initialHeight: values.height, initialVelocity: 0, gravity };
+        if (type === 'parabolic') { const angle = values.angle * Math.PI / 180; return { kind: 'parabola', duration: Math.max(0.01, 2 * values.initialVelocity * Math.sin(angle) / gravity), velocity: values.initialVelocity, angle, gravity }; }
+        if (type === 'semiparabolic') return { kind: 'parabola', duration: Math.max(0.01, Math.sqrt(2 * values.height / gravity)), velocity: values.horizontalVelocity, height: values.height, gravity, horizontal: true };
+        if (type === 'newton2') return { kind: 'force', duration: 4, acceleration: values.force / Math.max(0.01, values.mass) };
+        if (type === 'newton1') return { kind: 'force', duration: 4, acceleration: values.force / Math.max(0.01, values.mass) };
+        if (type === 'newton3') return { kind: 'force', duration: 4, acceleration: values.force };
+        if (type === 'torque') return { kind: 'torque', duration: 4, angularVelocity: values.force * values.distance * Math.sin(values.angle * Math.PI / 180) };
+        if (type === 'rotational') return { kind: 'torque', duration: 4, angularVelocity: values.forceA * values.distanceA / Math.max(0.01, values.distanceB) };
+        return { kind: 'center', duration: 4, position: (values.massA * values.positionA + values.massB * values.positionB) / Math.max(0.01, values.massA + values.massB) };
     }
-    20% { 
-        transform: scale3d(1.1, 1.1, 1.1); 
+
+    function drawSimulation(result) {
+        const canvas = document.getElementById('simulation-canvas');
+        if (!canvas || !result.motion) return;
+        const context = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        const motion = result.motion;
+        const animationDuration = Math.min(8, Math.max(1, motion.duration));
+        const startedAt = performance.now();
+        cancelAnimationFrame(drawSimulation.animationId);
+
+        const draw = (now) => {
+            const elapsed = ((now - startedAt) / 1000) % animationDuration;
+            const physicalTime = elapsed * motion.duration / animationDuration;
+            const progress = motion.duration ? physicalTime / motion.duration : 0;
+            context.clearRect(0, 0, width, height);
+            context.fillStyle = '#0c1626';
+            context.fillRect(0, 0, width, height);
+            context.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+            context.lineWidth = 1;
+            for (let x = 0; x <= width; x += 40) { context.beginPath(); context.moveTo(x, 0); context.lineTo(x, height); context.stroke(); }
+            for (let y = 0; y <= height; y += 40) { context.beginPath(); context.moveTo(0, y); context.lineTo(width, y); context.stroke(); }
+            context.strokeStyle = '#6ea8fe';
+            context.lineWidth = 3;
+            context.fillStyle = '#fbbf24';
+
+            if (motion.kind === 'line') {
+                const normalizedDistance = motion.distance ? (motion.velocity * physicalTime) / motion.distance : 0;
+                const x = 45 + Math.max(0, Math.min(1, normalizedDistance)) * (width - 90);
+                context.beginPath(); context.moveTo(40, height - 45); context.lineTo(width - 40, height - 45); context.stroke();
+                context.beginPath(); context.arc(x, height - 57, 12, 0, Math.PI * 2); context.fill();
+            } else if (motion.kind === 'circle') {
+                const radius = Math.max(25, Math.min(125, motion.radius * 30));
+                const angle = motion.angularVelocity * physicalTime;
+                context.beginPath(); context.arc(width / 2, height / 2, radius, 0, Math.PI * 2); context.stroke();
+                context.beginPath(); context.arc(width / 2 + Math.cos(angle) * radius, height / 2 + Math.sin(angle) * radius, 10, 0, Math.PI * 2); context.fill();
+            } else if (motion.kind === 'vertical') {
+                const position = motion.initialHeight + motion.initialVelocity * physicalTime - 0.5 * motion.gravity * physicalTime * physicalTime;
+                const totalHeight = Math.max(1, motion.initialHeight + Math.max(0, motion.initialVelocity * motion.initialVelocity / (2 * motion.gravity)));
+                const y = height - 35 - Math.max(0, Math.min(1, position / totalHeight)) * (height - 70);
+                context.beginPath(); context.moveTo(width / 2, 20); context.lineTo(width / 2, height - 20); context.stroke();
+                context.beginPath(); context.arc(width / 2, y, 12, 0, Math.PI * 2); context.fill();
+            } else if (motion.kind === 'parabola') {
+                const angle = motion.horizontal ? 0 : motion.angle;
+                const xDistance = motion.horizontal ? motion.velocity * physicalTime : motion.velocity * Math.cos(angle) * physicalTime;
+                const yDistance = motion.horizontal ? motion.height - 0.5 * motion.gravity * physicalTime * physicalTime : motion.velocity * Math.sin(angle) * physicalTime - 0.5 * motion.gravity * physicalTime * physicalTime;
+                const range = motion.horizontal ? motion.velocity * motion.duration : motion.velocity * Math.cos(angle) * motion.duration;
+                const peak = motion.horizontal ? motion.height : motion.velocity * motion.velocity * Math.sin(angle) ** 2 / (2 * motion.gravity);
+                const x = 40 + Math.max(0, Math.min(1, xDistance / Math.max(1, range))) * (width - 80);
+                const y = height - 35 - Math.max(0, Math.min(1, yDistance / Math.max(1, peak))) * (height - 70);
+                context.beginPath(); context.moveTo(40, height - 35); context.quadraticCurveTo(width / 2, 40, width - 40, height - 35); context.stroke();
+                context.beginPath(); context.arc(x, y, 10, 0, Math.PI * 2); context.fill();
+            } else if (motion.kind === 'torque') {
+                const angle = motion.angularVelocity * physicalTime;
+                context.beginPath(); context.moveTo(width / 2 - 150 * Math.cos(angle), height / 2 - 150 * Math.sin(angle)); context.lineTo(width / 2 + 150 * Math.cos(angle), height / 2 + 150 * Math.sin(angle)); context.stroke();
+                context.beginPath(); context.arc(width / 2, height / 2, 14, 0, Math.PI * 2); context.fill();
+            } else if (motion.kind === 'force') {
+                const accelerationDistance = 0.5 * motion.acceleration * physicalTime * physicalTime;
+                const x = Math.max(55, Math.min(width - 55, 55 + accelerationDistance * 12));
+                context.beginPath(); context.moveTo(40, height / 2); context.lineTo(width - 40, height / 2); context.stroke();
+                context.beginPath(); context.arc(x, height / 2, 12, 0, Math.PI * 2); context.fill();
+            } else {
+                context.fillStyle = '#6ea8fe'; context.fillRect(110, height / 2 - 18, 420, 36); context.fillStyle = '#fbbf24'; context.beginPath(); context.arc(320 + (motion.position / 5), height / 2, 12, 0, Math.PI * 2); context.fill();
+            }
+            drawSimulation.animationId = requestAnimationFrame(draw);
+        };
+        drawSimulation.animationId = requestAnimationFrame(draw);
     }
-    40% { 
-        transform: scale3d(.9, .9, .9); 
+
+    function runSimulation() {
+        const type = document.getElementById('simulation-type').value;
+        const definition = SIMULATION_DEFINITIONS[type];
+        const values = {};
+        const gravityInput = document.getElementById('simulation-gravity');
+        const rawGravity = Number(gravityInput?.value);
+        const gravity = Number.isFinite(rawGravity) ? Math.min(30, Math.max(0.01, rawGravity)) : 9.81;
+        if (gravityInput) gravityInput.value = gravity.toFixed(2);
+        definition.fields.forEach(([id]) => {
+            const input = document.getElementById(`simulation-${id}`);
+            const rawValue = Number(input?.value);
+            const value = Number.isFinite(rawValue) ? rawValue : 0;
+            values[id] = ['mass', 'massA', 'massB'].includes(id)
+                ? Math.max(0.01, value)
+                : ['radius', 'time', 'height', 'initialHeight', 'initialVelocity', 'horizontalVelocity', 'angularVelocity'].includes(id)
+                    ? Math.max(0, value)
+                    : id === 'distanceB'
+                        ? Math.max(0.01, value)
+                        : value;
+            if (input) input.value = String(values[id]);
+        });
+        values.gravity = gravity;
+        const result = definition.calculate(values);
+        result.motion = createSimulationMotion(type, values);
+        const resultBox = document.getElementById('simulation-result');
+        resultBox.innerHTML = `<strong>${result.title}</strong><span>${result.formula}</span><span>${result.values}</span><b>${result.result}</b>`;
+        drawSimulation(result);
     }
-    60% { 
-        opacity: 1; 
-        transform: scale3d(1.03, 1.03, 1.03); 
+
+    const SHADOW_OBJECTS = {
+        tower: { label: 'Torre', width: 0.72, depth: 0.72, color: '#e6b566', accent: '#f6d58b' },
+        tree: { label: 'Árbol', width: 1.2, depth: 1.2, color: '#4eaf83', accent: '#9fe2a7' },
+        cube: { label: 'Cubo', width: 1.35, depth: 1.35, color: '#6e9eea', accent: '#b4d0ff' },
+        person: { label: 'Persona', width: 0.46, depth: 0.46, color: '#d57964', accent: '#ffb18f' }
+    };
+
+    const shadowScene = { azimuth: 135, elevation: 28, height: 8, object: 'tower', rotation: -0.35, animationId: null, dragging: false, lastX: 0 };
+
+    function shadowDirectionLabel(azimuth) {
+        const directions = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'];
+        return directions[Math.round(azimuth / 45) % 8];
     }
-    80% { 
-        transform: scale3d(.97, .97, .97); 
+
+    function projectShadowPoint(x, y, z, viewRotation, width, height) {
+        const rotatedX = x * Math.cos(viewRotation) - y * Math.sin(viewRotation);
+        const rotatedY = x * Math.sin(viewRotation) + y * Math.cos(viewRotation);
+        return { x: width / 2 + rotatedX * 31 + rotatedY * 17, y: height * 0.67 + rotatedY * 18 - z * 30 };
     }
-    100% { 
-        opacity: 1; 
-        transform: scale3d(1, 1, 1); 
+
+    function drawShadowScene() {
+        if (window.MathwareShadow3D?.instance) {
+            window.MathwareShadow3D.instance.update(shadowScene);
+            const labels = { tower: 'Torre', tree: 'Árbol', cube: 'Cubo', person: 'Persona' };
+            const direction = shadowDirectionLabel(shadowScene.azimuth);
+            const length = (shadowScene.height / Math.tan(shadowScene.elevation * Math.PI / 180)).toFixed(1);
+            const result = document.getElementById('simulation-result');
+            const label = document.getElementById('shadow-time-label');
+            if (result) result.innerHTML = `<strong>${labels[shadowScene.object] || 'Objeto'}: sombra proyectada</strong><span>Dirección: ${direction} · Azimut: ${shadowScene.azimuth}° · Elevación: ${shadowScene.elevation}°</span><b>Longitud de la sombra: ${length} m</b>`;
+            if (label) label.textContent = shadowScene.elevation > 55 ? 'Sol alto' : shadowScene.elevation > 28 ? 'Tarde dorada' : 'Mañana luminosa';
+            return;
+        }
+        const canvas = document.getElementById('simulation-canvas');
+        if (!canvas) return;
+        const context = canvas.getContext('2d');
+        const ratio = window.devicePixelRatio || 1;
+        const bounds = canvas.getBoundingClientRect();
+        const width = Math.max(320, bounds.width || 900);
+        const height = Math.max(260, bounds.height || 560);
+        if (canvas.width !== Math.round(width * ratio) || canvas.height !== Math.round(height * ratio)) {
+            canvas.width = Math.round(width * ratio);
+            canvas.height = Math.round(height * ratio);
+        }
+        context.setTransform(ratio, 0, 0, ratio, 0, 0);
+        const horizon = height * 0.36;
+        const object = SHADOW_OBJECTS[shadowScene.object];
+        const radians = shadowScene.azimuth * Math.PI / 180;
+        const elevation = shadowScene.elevation * Math.PI / 180;
+        const shadowLength = shadowScene.height / Math.tan(elevation);
+        const shadowX = Math.sin(radians) * shadowLength;
+        const shadowY = Math.cos(radians) * shadowLength;
+        const ground = (x, y) => projectShadowPoint(x, y, 0, shadowScene.rotation, width, height);
+        const top = (x, y) => projectShadowPoint(x, y, shadowScene.height, shadowScene.rotation, width, height);
+
+        const sky = context.createLinearGradient(0, 0, 0, height);
+        sky.addColorStop(0, '#152c48');
+        sky.addColorStop(0.57, '#3d6680');
+        sky.addColorStop(0.58, '#c08b5d');
+        sky.addColorStop(1, '#201c24');
+        context.fillStyle = sky;
+        context.fillRect(0, 0, width, height);
+        context.fillStyle = 'rgba(255, 194, 104, 0.16)';
+        context.beginPath();
+        context.arc(width * 0.78, height * 0.2, Math.min(width, height) * 0.12, 0, Math.PI * 2);
+        context.fill();
+        context.fillStyle = '#ffd27d';
+        context.beginPath();
+        context.arc(width * 0.78, height * 0.2, Math.min(width, height) * 0.055, 0, Math.PI * 2);
+        context.fill();
+
+        const horizonGradient = context.createLinearGradient(0, horizon, 0, height);
+        horizonGradient.addColorStop(0, 'rgba(35, 42, 48, 0.14)');
+        horizonGradient.addColorStop(1, 'rgba(8, 12, 18, 0.7)');
+        context.fillStyle = horizonGradient;
+        context.fillRect(0, horizon, width, height - horizon);
+        context.strokeStyle = 'rgba(255, 221, 163, 0.17)';
+        context.lineWidth = 1;
+        for (let distance = -18; distance <= 18; distance += 1.5) {
+            const start = ground(distance, -15);
+            const end = ground(distance, 15);
+            context.beginPath(); context.moveTo(start.x, start.y); context.lineTo(end.x, end.y); context.stroke();
+        }
+        for (let distance = -15; distance <= 15; distance += 1.5) {
+            const start = ground(-18, distance);
+            const end = ground(18, distance);
+            context.beginPath(); context.moveTo(start.x, start.y); context.lineTo(end.x, end.y); context.stroke();
+        }
+
+        const shadowBase = ground(0, 0);
+        const shadowTip = ground(shadowX, shadowY);
+        const shadowTop = ground(shadowX + object.width * 0.45, shadowY + object.depth * 0.45);
+        context.fillStyle = 'rgba(8, 13, 20, 0.56)';
+        context.beginPath();
+        context.moveTo(shadowBase.x, shadowBase.y);
+        context.lineTo(shadowTip.x, shadowTip.y);
+        context.lineTo(shadowTop.x, shadowTop.y);
+        context.lineTo(ground(object.width * 0.45, object.depth * 0.45).x, ground(object.width * 0.45, object.depth * 0.45).y);
+        context.closePath(); context.fill();
+
+        const base = ground(0, 0);
+        const baseRight = ground(object.width, 0);
+        const baseBack = ground(0, object.depth);
+        const baseFar = ground(object.width, object.depth);
+        const topLeft = top(0, 0);
+        const topRight = top(object.width, 0);
+        const topBack = top(0, object.depth);
+        const topFar = top(object.width, object.depth);
+        context.fillStyle = object.color;
+        context.beginPath(); context.moveTo(base.x, base.y); context.lineTo(baseRight.x, baseRight.y); context.lineTo(topRight.x, topRight.y); context.lineTo(topLeft.x, topLeft.y); context.closePath(); context.fill();
+        context.fillStyle = object.accent;
+        context.beginPath(); context.moveTo(base.x, base.y); context.lineTo(baseBack.x, baseBack.y); context.lineTo(topBack.x, topBack.y); context.lineTo(topLeft.x, topLeft.y); context.closePath(); context.fill();
+        context.fillStyle = object.color;
+        context.beginPath(); context.moveTo(topLeft.x, topLeft.y); context.lineTo(topRight.x, topRight.y); context.lineTo(topFar.x, topFar.y); context.lineTo(topBack.x, topBack.y); context.closePath(); context.fill();
+        if (shadowScene.object === 'tree') {
+            context.fillStyle = '#70482f';
+            context.fillRect(base.x - 5, topLeft.y + 18, 10, base.y - topLeft.y - 18);
+            context.fillStyle = object.color;
+            context.beginPath(); context.arc(topLeft.x + 12, topLeft.y + 10, 26, 0, Math.PI * 2); context.fill();
+        }
+        if (shadowScene.object === 'person') {
+            context.fillStyle = object.accent;
+            context.beginPath(); context.arc(topLeft.x + 9, topLeft.y - 13, 9, 0, Math.PI * 2); context.fill();
+        }
+        context.strokeStyle = 'rgba(255, 255, 255, 0.34)';
+        context.lineWidth = 1.5;
+        context.beginPath(); context.moveTo(base.x, base.y); context.lineTo(baseRight.x, baseRight.y); context.lineTo(topRight.x, topRight.y); context.lineTo(topFar.x, topFar.y); context.stroke();
+        context.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        context.font = '600 12px Inter, sans-serif';
+        context.fillText(`${shadowScene.height.toFixed(1)} m`, topRight.x + 8, (topRight.y + baseRight.y) / 2);
+        const result = document.getElementById('simulation-result');
+        const label = document.getElementById('shadow-time-label');
+        const direction = shadowDirectionLabel(shadowScene.azimuth);
+        const length = shadowLength.toFixed(1);
+        if (result) result.innerHTML = `<strong>${object.label}: sombra proyectada</strong><span>Dirección: ${direction} · Azimut: ${shadowScene.azimuth}° · Elevación: ${shadowScene.elevation}°</span><b>Longitud de la sombra: ${length} m</b>`;
+        if (label) label.textContent = shadowScene.elevation > 55 ? 'Sol alto' : shadowScene.elevation > 28 ? 'Tarde dorada' : 'Mañana luminosa';
     }
-}
 
-.result-stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-    margin: 40px auto;
-    max-width: 600px;
-}
-
-.result-stat-item {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 35px;
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform var(--transition-medium);
-}
-
-.result-stat-item:hover {
-    transform: translateY(-5px);
-}
-
-.result-label {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.result-value {
-    font-size: 2.5rem;
-    font-weight: 700;
-}
-
-.result-message {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
-    margin: 30px 0;
-}
-
-.historial-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 30px;
-    width: 100%;
-    margin: 30px 0;
-}
-
-.history-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius-lg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-    transition: transform var(--transition-medium);
-}
-
-.history-card:hover {
-    transform: translateY(-5px);
-}
-
-.card-header-modern {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 25px;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.card-icon {
-    font-size: 2.5rem;
-}
-
-.card-header-modern h2,
-.card-header-modern h3 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin: 0;
-}
-
-.card-header-modern p {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin: 5px 0 0;
-}
-
-.card-content-modern {
-    padding: 20px;
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-.card-content-modern::-webkit-scrollbar {
-    width: 8px;
-}
-
-.card-content-modern::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius-sm);
-}
-
-.card-content-modern::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-sm);
-}
-
-.card-content-modern::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
-
-.history-entry {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    margin-bottom: 10px;
-    background: var(--bg-secondary);
-    border-radius: var(--radius-sm);
-    transition: all var(--transition-fast);
-}
-
-.history-entry:hover {
-    background: var(--bg-card-hover);
-    transform: translateX(5px);
-}
-
-.entry-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 1.3rem;
-    margin-right: 15px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.entry-info {
-    flex: 1;
-}
-
-.entry-info .tema {
-    font-weight: 600;
-    font-size: 1rem;
-    margin-bottom: 5px;
-}
-
-.entry-info .fecha {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-}
-
-.entry-score {
-    font-size: 1.5rem;
-    font-weight: 700;
-    background: var(--primary-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--text-muted);
-    font-size: 1.1rem;
-}
-
-.toast-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: var(--z-tooltip);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    pointer-events: none;
-}
-
-.toast {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px 20px;
-    background: rgba(26, 26, 46, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: var(--shadow-lg);
-    min-width: 300px;
-    opacity: 0;
-    transform: translateX(400px);
-    transition: all var(--transition-medium);
-    pointer-events: auto;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-.toast.hide {
-    opacity: 0;
-    transform: translateX(400px);
-}
-
-.toast-icon {
-    font-size: 1.5rem;
-    flex-shrink: 0;
-}
-
-.toast-message {
-    flex: 1;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--text-primary);
-}
-
-.toast-close {
-    background: none;
-    border: none;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color var(--transition-fast);
-    border-radius: var(--radius-sm);
-}
-
-.toast-close:hover {
-    color: white;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.toast-success { border-left: 4px solid var(--text-success); }
-.toast-error { border-left: 4px solid var(--text-error); }
-.toast-warning { border-left: 4px solid var(--text-warning); }
-.toast-info { border-left: 4px solid #667eea; }
-
-.toast-success .toast-icon { color: var(--text-success); }
-.toast-error .toast-icon { color: var(--text-error); }
-.toast-warning .toast-icon { color: var(--text-warning); }
-.toast-info .toast-icon { color: #667eea; }
-
-.credits {
-    position: absolute;
-    bottom: 20px;
-    right: 30px;
-    text-align: right;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    line-height: 1.6;
-}
-
-.credits p {
-    margin: 0;
-}
-
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-
-#welcome-view {
-    gap: 20px;
-}
-
-.math-particles {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: -1;
-}
-
-.particle {
-    position: absolute;
-    font-size: clamp(1.2rem, 2vw, 2rem);
-    font-weight: 600;
-    color: rgba(102, 126, 234, 0.6);
-    text-shadow: 
-        0 0 10px rgba(102, 126, 234, 0.8),
-        0 0 20px rgba(102, 126, 234, 0.6),
-        0 0 30px rgba(102, 126, 234, 0.4);
-    animation: float-particle linear infinite;
-    opacity: 0;
-    filter: blur(0.5px);
-    will-change: transform, opacity;
-}
-
-@keyframes float-particle {
-    0% {
-        transform: translateY(100vh) translateX(0) rotate(0deg) scale(0);
-        opacity: 0;
+    function updateShadowControls() {
+        shadowScene.object = document.getElementById('shadow-object')?.value || 'tower';
+        shadowScene.height = Number(document.getElementById('shadow-height')?.value || 8);
+        shadowScene.azimuth = Number(document.getElementById('shadow-azimuth')?.value || 135);
+        shadowScene.elevation = Number(document.getElementById('shadow-elevation')?.value || 28);
+        const heightValue = document.getElementById('shadow-height-value');
+        const azimuthValue = document.getElementById('shadow-azimuth-value');
+        const elevationValue = document.getElementById('shadow-elevation-value');
+        if (heightValue) heightValue.textContent = `${shadowScene.height.toFixed(1)} m`;
+        if (azimuthValue) azimuthValue.textContent = `${shadowScene.azimuth}° ${shadowDirectionLabel(shadowScene.azimuth)}`;
+        if (elevationValue) elevationValue.textContent = `${shadowScene.elevation}°`;
+        drawShadowScene();
     }
-    10% {
-        opacity: 0.6;
-        transform: translateY(90vh) translateX(20px) rotate(45deg) scale(1);
-    }
-    50% {
-        opacity: 0.8;
-        transform: translateY(50vh) translateX(-30px) rotate(180deg) scale(1.2);
-    }
-    90% {
-        opacity: 0.4;
-        transform: translateY(10vh) translateX(40px) rotate(315deg) scale(0.8);
-    }
-    100% {
-        transform: translateY(-10vh) translateX(0) rotate(360deg) scale(0);
-        opacity: 0;
-    }
-}
 
-.particle:nth-child(1) { left: 5%; animation-duration: 15s; animation-delay: 0s; }
-.particle:nth-child(2) { left: 12%; animation-duration: 18s; animation-delay: 2s; color: rgba(240, 147, 251, 0.6); }
-.particle:nth-child(3) { left: 20%; animation-duration: 14s; animation-delay: 1s; }
-.particle:nth-child(4) { left: 28%; animation-duration: 20s; animation-delay: 3s; color: rgba(0, 242, 254, 0.6); }
-.particle:nth-child(5) { left: 35%; animation-duration: 16s; animation-delay: 0.5s; }
-.particle:nth-child(6) { left: 42%; animation-duration: 19s; animation-delay: 4s; color: rgba(245, 87, 108, 0.6); }
-.particle:nth-child(7) { left: 50%; animation-duration: 17s; animation-delay: 1.5s; }
-.particle:nth-child(8) { left: 58%; animation-duration: 15s; animation-delay: 2.5s; color: rgba(102, 126, 234, 0.7); }
-.particle:nth-child(9) { left: 65%; animation-duration: 21s; animation-delay: 0.8s; }
-.particle:nth-child(10) { left: 72%; animation-duration: 14s; animation-delay: 3.5s; color: rgba(240, 147, 251, 0.5); }
-.particle:nth-child(11) { left: 80%; animation-duration: 18s; animation-delay: 1.2s; }
-.particle:nth-child(12) { left: 88%; animation-duration: 16s; animation-delay: 4.5s; color: rgba(0, 242, 254, 0.7); }
-.particle:nth-child(13) { left: 95%; animation-duration: 19s; animation-delay: 2.8s; }
-.particle:nth-child(14) { left: 8%; animation-duration: 17s; animation-delay: 3.2s; color: rgba(245, 87, 108, 0.5); }
-.particle:nth-child(15) { left: 15%; animation-duration: 15s; animation-delay: 1.8s; }
-.particle:nth-child(16) { left: 23%; animation-duration: 20s; animation-delay: 0.3s; color: rgba(102, 126, 234, 0.6); }
-.particle:nth-child(17) { left: 31%; animation-duration: 14s; animation-delay: 4.2s; }
-.particle:nth-child(18) { left: 38%; animation-duration: 18s; animation-delay: 2.2s; color: rgba(240, 147, 251, 0.7); }
-.particle:nth-child(19) { left: 46%; animation-duration: 16s; animation-delay: 3.8s; }
-.particle:nth-child(20) { left: 54%; animation-duration: 19s; animation-delay: 1.4s; color: rgba(0, 242, 254, 0.6); }
-.particle:nth-child(21) { left: 62%; animation-duration: 17s; animation-delay: 0.6s; }
-.particle:nth-child(22) { left: 70%; animation-duration: 15s; animation-delay: 4.8s; color: rgba(245, 87, 108, 0.6); }
-.particle:nth-child(23) { left: 77%; animation-duration: 21s; animation-delay: 2.4s; }
-.particle:nth-child(24) { left: 85%; animation-duration: 14s; animation-delay: 3.6s; color: rgba(102, 126, 234, 0.7); }
-.particle:nth-child(25) { left: 92%; animation-duration: 18s; animation-delay: 1.1s; }
+    function resetShadowScene() {
+        const defaults = { 'shadow-object': 'tower', 'shadow-height': 8, 'shadow-azimuth': 135, 'shadow-elevation': 28 };
+        Object.entries(defaults).forEach(([id, value]) => { const input = document.getElementById(id); if (input) input.value = value; });
+        shadowScene.rotation = -0.35;
+        updateShadowControls();
+    }
 
-@media (max-width: 1400px) {
-    .container {
-        max-width: 1000px;
+    function initShadowLab() {
+        if (initShadowLab.ready) {
+            updateShadowControls();
+            return;
+        }
+        initShadowLab.ready = true;
+        const canvas = document.getElementById('simulation-canvas');
+        if (canvas && window.MathwareShadow3D?.create) {
+            window.MathwareShadow3D.instance = window.MathwareShadow3D.create(canvas);
+        }
+        ['shadow-object', 'shadow-height', 'shadow-azimuth', 'shadow-elevation'].forEach((id) => document.getElementById(id)?.addEventListener('input', updateShadowControls));
+        document.getElementById('btn-shadow-reset')?.addEventListener('click', resetShadowScene);
+        canvas?.addEventListener('pointerdown', (event) => { shadowScene.dragging = true; shadowScene.lastX = event.clientX; canvas.setPointerCapture(event.pointerId); });
+        canvas?.addEventListener('pointermove', (event) => { if (!shadowScene.dragging) return; shadowScene.rotation += (event.clientX - shadowScene.lastX) * 0.008; shadowScene.lastX = event.clientX; drawShadowScene(); });
+        canvas?.addEventListener('pointerup', () => { shadowScene.dragging = false; });
+        window.addEventListener('resize', () => window.MathwareShadow3D?.instance?.resize());
+        updateShadowControls();
     }
-}
 
-@media (max-width: 768px) {
-    .container {
-        padding: 20px;
-        min-height: auto;
-    }
-    
-    .title {
-        font-size: 2rem;
-    }
-    
-    .game-header {
-        flex-direction: column;
-        gap: 12px;
-    }
-    
-    .stat-card {
-        width: 100%;
-        max-width: none;
-    }
-    
-    .btn-pause-corner {
-        top: 15px;
-        right: 15px;
-        width: 45px;
-        height: 45px;
-        font-size: 1.2rem;
-    }
-    
-    #playing-view {
-        padding: 70px 20px 20px;
-    }
-    
-    .options-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .historial-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .result-stats {
-        grid-template-columns: 1fr;
-    }
-    
-    .credits {
-        position: static;
-        text-align: center;
-        margin-top: 30px;
-    }
-    
-    .btn {
-        min-width: 220px;
-        padding: 16px 32px;
-    }
-    
-    .btn-back {
-        position: static;
-        margin-top: 20px;
-    }
-    
-    .particle:nth-child(n+14) {
-        display: none;
-    }
-    
-    .particle {
-        font-size: 1rem;
-    }
-    
-    .toast-container {
-        top: 10px;
-        right: 10px;
-        left: 10px;
-    }
-    
-    .toast {
-        min-width: auto;
-    }
-}
+    async function updateMenuSummary() {
+        const username = AuthSystem.getSession();
+        const greeting = document.getElementById('welcome-user');
+        if (greeting) {
+            greeting.textContent = username ? `Bienvenido, ${username}` : 'Bienvenido';
+        }
 
-@media (max-width: 480px) {
-    .container {
-        padding: 15px;
-    }
-    
-    .modal-card {
-        padding: 30px 20px;
-    }
-    
-    .question-card {
-        padding: 25px 20px;
-    }
-    
-    .question-text {
-        font-size: 1.3rem;
-    }
-}
+        const summary = await HistoryStore.getGlobalSummary();
+        const summaryTotal = document.getElementById('summary-total');
+        const summaryAverage = document.getElementById('summary-average');
+        if (summaryTotal) summaryTotal.textContent = String(summary.total);
+        if (summaryAverage) summaryAverage.textContent = summary.average;
 
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
-}
+        const topBtn = document.getElementById('btn-logout-top');
+        if (topBtn) {
+            topBtn.classList.toggle('hidden', !AuthSystem.isLoggedIn());
+        }
 
-@media (prefers-contrast: high) {
-    :root {
-        --text-primary: #ffffff;
-        --text-secondary: #e0e0e0;
-        --text-muted: #c0c0c0;
+        const adminBtn = document.getElementById('btn-admin-panel');
+        if (adminBtn) {
+            adminBtn.classList.toggle('hidden', !AuthSystem.isAdmin());
+        }
     }
-    
-    .btn,
-    .input-box,
-    .option-btn {
-        border-width: 3px;
-    }
-}
 
-@media print {
-    .animated-background,
-    .btn-pause-corner,
-    nav,
-    button,
-    .toast-container {
-        display: none !important;
+    async function fetchAdmin(path, options = {}) {
+        const adminUser = AuthSystem.getSession();
+        const response = await fetch(`${API_BASE}${path}`, {
+            ...options,
+            headers: {
+                ...(options.headers || {}),
+                'Content-Type': 'application/json',
+                'x-session-token': AuthSystem.getSessionToken()
+            }
+        });
+        let result = {};
+        try {
+            result = await response.json();
+        } catch (error) {
+            result = {};
+        }
+        return { ok: response.ok, result };
     }
-    
-    body {
-        background: white;
-        color: black;
-    }
-    
-    .container {
-        box-shadow: none;
-        border: 1px solid #ccc;
-    }
-}
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg-primary: #0f0f23;
-        --bg-secondary: #1a1a2e;
-        --text-primary: #ffffff;
+    async function updateApiKeyFromAdmin() {
+        const input = document.getElementById('admin-api-key');
+        if (!input) return;
+        const apiKey = input.value.trim();
+        const response = await fetchAdmin('/admin/settings/api-key', {
+            method: 'PUT',
+            body: JSON.stringify({ apiKey })
+        });
+        if (response.ok) {
+            showToast('API key actualizada');
+        } else {
+            showToast(response.result.message || 'No se pudo actualizar la API key');
+        }
     }
-}
+
+    function renderAdminHistoryRows(history) {
+        const container = document.getElementById('admin-history-list');
+        if (!container) return;
+        if (!Array.isArray(history) || !history.length) {
+            container.innerHTML = '<div class="history-item"><div><strong>Sin resultados</strong><small>No hay registros disponibles.</small></div></div>';
+            return;
+        }
+
+        container.innerHTML = history.map((entry) => {
+            return `
+                <div class="admin-row">
+                    <div>
+                        <strong>${escapeHtml(entry.username)}</strong>
+                        <small>${escapeHtml(new Date(entry.created_at).toLocaleString('es-ES'))}</small>
+                    </div>
+                    <small>${escapeHtml(entry.subject)} · ${escapeHtml(entry.topic || 'general')} · ${escapeHtml(entry.difficulty)}</small>
+                    <small>Puntaje: ${escapeHtml(entry.score)}/${escapeHtml(entry.total_questions)}</small>
+                    <div class="admin-actions">
+                        <button type="button" data-admin-history-edit="${entry.id}">Editar</button>
+                        <button type="button" data-admin-history-delete="${entry.id}">Eliminar</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        container.querySelectorAll('[data-admin-history-edit]').forEach((button) => {
+            button.addEventListener('click', async () => {
+                const id = Number(button.dataset.adminHistoryEdit);
+                const score = Number(prompt('Nueva puntuación', '0')) || 0;
+                const total = Number(prompt('Total de preguntas', '10')) || 10;
+                const subject = prompt('Materia', 'general') || 'general';
+                const topic = prompt('Tema', 'general') || 'general';
+                const difficulty = prompt('Nivel', 'Normal') || 'Normal';
+                const response = await fetchAdmin(`/admin/history/${id}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ score, total, subject, topic, difficulty })
+                });
+                if (response.ok) {
+                    showToast('Resultado actualizado');
+                    await loadAdminPanel();
+                } else {
+                    showToast(response.result.message || 'No se pudo actualizar');
+                }
+            });
+        });
+
+        container.querySelectorAll('[data-admin-history-delete]').forEach((button) => {
+            button.addEventListener('click', async () => {
+                const id = Number(button.dataset.adminHistoryDelete);
+                if (!confirm('¿Deseas eliminar este resultado?')) return;
+                const response = await fetch(`${API_BASE}/admin/history/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json', 'x-session-token': AuthSystem.getSessionToken() }
+                });
+                if (response.ok) {
+                    showToast('Registro eliminado');
+                    await loadAdminPanel();
+                } else {
+                    showToast('No se pudo eliminar');
+                }
+            });
+        });
+    }
+
+    function renderAdminUserRows(users) {
+        const container = document.getElementById('admin-user-list');
+        if (!container) return;
+        if (!Array.isArray(users) || !users.length) {
+            container.innerHTML = '<div class="history-item"><div><strong>Sin usuarios</strong><small>Aún no hay cuentas registradas.</small></div></div>';
+            return;
+        }
+
+        container.innerHTML = users.map((user) => {
+            const owner = user.username === ADMIN_USERNAME;
+            return `
+                <div class="admin-row ${owner ? 'admin-owner' : ''}">
+                    <div>
+                        <strong>${escapeHtml(user.username)}${owner ? ' ★' : ''}</strong>
+                        <small>Rol: ${escapeHtml(user.role || 'user')} · Estado: ${escapeHtml(user.status || 'active')}</small>
+                    </div>
+                    <div class="admin-actions">
+                        <button type="button" data-admin-user-toggle-role="${user.id}">${(user.role || 'user') === 'admin' ? 'Quitar admin' : 'Dar admin'}</button>
+                        <button type="button" data-admin-user-toggle-ban="${user.id}">${(user.status || 'active') === 'banned' ? 'Desbanear' : 'Banear'}</button>
+                        <button type="button" data-admin-user-toggle-block="${user.id}">${(user.status || 'active') === 'blocked' ? 'Desbloquear' : 'Bloquear'}</button>
+                        <button type="button" data-admin-user-rename="${user.id}">Renombrar</button>
+                        <button type="button" data-admin-user-password="${user.id}">Contraseña</button>
+                        <button type="button" data-admin-user-delete="${user.id}">Eliminar</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        container.querySelectorAll('[data-admin-user-toggle-role]').forEach((button) => {
+            button.addEventListener('click', async () => {
+                const id = Number(button.dataset.adminUserToggleRole);
+                const result = await fetchAdmin(`/admin/users/${id}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ action: 'toggleAdmin' })
+                });
+                if (result.ok) {
+                    showToast(result.result.message || 'Cambio aplicado');
+                    await loadAdminPanel();
+                } else {
+                    showToast(result.result.message || 'No se pudo cambiar');
+                }
+            });
+        });
+
+        container.querySelectorAll('[data-admin-user-toggle-ban]').forEach((button) => {
+            button.addEventListener('click', async () => {
+                const id = Number(button.dataset.adminUserToggleBan);
+                const result = await fetchAdmin(`/admin/users/${id}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ action: 'toggleBan' })
+                });
+                if (result.ok) {
+                    showToast(result.result.message || 'Cambio aplicado');
+                    await loadAdminPanel();
+                } else {
+                    showToast(result.result.message || 'No se pudo cambiar');
+                }
+            });
+        });
+
+        container.querySelectorAll('[data-admin-user-toggle-block]').forEach((button) => {
+            button.addEventListener('click', async () => {
+                const id = Number(button.dataset.adminUserToggleBlock);
+                const result = await fetchAdmin(`/admin/users/${id}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ action: 'toggleBlock' })
+                });
+                if (result.ok) {
+                    showToast(result.result.message || 'Cambio aplicado');
+                    await loadAdminPanel();
+                } else {
+                    showToast(result.result.message || 'No se pudo cambiar');
+                }
+            });
+        });
+
+        container.querySelectorAll('[data-admin-user-rename]').forEach((button) => {
+            button.addEventListener('click', async () => {
+                const id = Number(button.dataset.adminUserRename);
+                const newUsername = prompt('Nuevo nombre de usuario', 'usuario_nuevo');
+                if (!newUsername) return;
+                const result = await fetchAdmin(`/admin/users/${id}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ action: 'changeUsername', newUsername })
+                });
+                if (result.ok) {
+                    showToast(result.result.message || 'Usuario actualizado');
+                    await loadAdminPanel();
+                } else {
+                    showToast(result.result.message || 'No se pudo actualizar');
+                }
+            });
+        });
+
+        container.querySelectorAll('[data-admin-user-password]').forEach((button) => {
+            button.addEventListener('click', async () => {
+                const id = Number(button.dataset.adminUserPassword);
+                const newPassword = prompt('Nueva contraseña (mínimo 4 caracteres)', '');
+                if (!newPassword) return;
+                const result = await fetchAdmin(`/admin/users/${id}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ action: 'changePassword', newPassword })
+                });
+                if (result.ok) {
+                    showToast(result.result.message || 'Contraseña actualizada');
+                } else {
+                    showToast(result.result.message || 'No se pudo actualizar');
+                }
+            });
+        });
+
+        container.querySelectorAll('[data-admin-user-delete]').forEach((button) => {
+            button.addEventListener('click', async () => {
+                const id = Number(button.dataset.adminUserDelete);
+                if (!confirm('¿Deseas eliminar esta cuenta?')) return;
+                const result = await fetchAdmin(`/admin/users/${id}`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ action: 'delete' })
+                });
+                if (result.ok) {
+                    showToast(result.result.message || 'Cuenta eliminada');
+                    await loadAdminPanel();
+                } else {
+                    showToast(result.result.message || 'No se pudo eliminar');
+                }
+            });
+        });
+    }
+
+    async function loadAdminPanel() {
+        const usersResult = await fetchAdmin('/admin/users');
+        const historyResult = await fetchAdmin('/admin/history');
+        if (usersResult.ok && Array.isArray(usersResult.result.users)) {
+            renderAdminUserRows(usersResult.result.users);
+        } else {
+            const container = document.getElementById('admin-user-list');
+            if (container) container.innerHTML = '<div class="history-item"><div><strong>Error</strong><small>No se pudo cargar la lista.</small></div></div>';
+        }
+
+        if (historyResult.ok && Array.isArray(historyResult.result.history)) {
+            renderAdminHistoryRows(historyResult.result.history);
+        } else {
+            const container = document.getElementById('admin-history-list');
+            if (container) container.innerHTML = '<div class="history-item"><div><strong>Error</strong><small>No se pudo cargar el historial.</small></div></div>';
+        }
+    }
+
+    async function renderHistory() {
+        const username = AuthSystem.getSession();
+        const summary = await HistoryStore.getGlobalSummary();
+        const globalSummaryBox = document.getElementById('global-summary');
+        if (globalSummaryBox) {
+            if (!summary.total) {
+                globalSummaryBox.innerHTML = '<div class="history-item"><div><strong>No hay registros</strong><small>Aún no se han realizado evaluaciones.</small></div></div>';
+            } else {
+                globalSummaryBox.innerHTML = summary.top.map((entry, index) => {
+                    const isAdmin = entry.username === ADMIN_USERNAME;
+                    return `
+                        <div class="history-item ${isAdmin ? 'admin-entry' : ''}">
+                            <div>
+                                <strong>#${index + 1} ${escapeHtml(entry.username)}</strong>
+                                <small>${escapeHtml(entry.subject)} · ${escapeHtml(entry.topic || 'general')}</small>
+                            </div>
+                            <div>
+                                <strong>${escapeHtml(entry.score)}/${escapeHtml(entry.total_questions)}</strong>
+                                <small>${escapeHtml(new Date(entry.created_at).toLocaleString('es-ES'))}</small>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        const userHistoryBox = document.getElementById('user-history');
+        if (userHistoryBox) {
+            const entries = username ? await HistoryStore.load() : [];
+            const userEntries = entries.filter((entry) => entry.username === username);
+            if (!userEntries.length) {
+                userHistoryBox.innerHTML = '<div class="history-item"><div><strong>Sin resultados</strong><small>Tu historial aparecerá aquí.</small></div></div>';
+            } else {
+                userHistoryBox.innerHTML = userEntries.map((entry) => {
+                    return `
+                        <div class="history-item">
+                            <div>
+                                <strong>${escapeHtml(entry.subject)}</strong>
+                                <small>${escapeHtml(new Date(entry.created_at).toLocaleString('es-ES'))}</small>
+                            </div>
+                            <div>
+                                <strong>${escapeHtml(entry.score)}/${escapeHtml(entry.total_questions)}</strong>
+                                <small>${escapeHtml(entry.difficulty)}</small>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+    }
+
+    function buildExamSettings() {
+        const subject = document.getElementById('exam-subject').value;
+        const topic = document.getElementById('exam-topic').value.trim();
+        const difficulty = document.getElementById('exam-difficulty').value;
+        const count = Number(document.getElementById('exam-count').value) || 10;
+        return { subject, topic, difficulty, count };
+    }
+
+    function renderQuestion() {
+        if (currentExam.currentIndex >= currentExam.questions.length) {
+            finishExam();
+            return;
+        }
+
+        const item = currentExam.questions[currentExam.currentIndex];
+        const questionText = document.getElementById('question-text');
+        const difficultyBadge = document.getElementById('difficulty-badge');
+        const scoreEl = document.getElementById('score');
+        const timerEl = document.getElementById('timer');
+        const counterEl = document.getElementById('question-counter');
+        const optionsEl = document.getElementById('options');
+        const progressBar = document.getElementById('progress-bar');
+
+        if (questionText) questionText.textContent = item.question;
+        if (difficultyBadge) {
+            const label = DIFFICULTY_SETTINGS[currentExam.difficulty]?.label || 'Normal';
+            difficultyBadge.textContent = label;
+        }
+        if (scoreEl) scoreEl.textContent = String(currentExam.score);
+        if (counterEl) counterEl.textContent = `${currentExam.currentIndex + 1}/${currentExam.questions.length}`;
+        if (progressBar) {
+            const progress = ((currentExam.currentIndex + 1) / currentExam.questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        if (optionsEl) {
+            optionsEl.innerHTML = '';
+            item.options.forEach((option, index) => {
+                const optionButton = document.createElement('button');
+                optionButton.type = 'button';
+                optionButton.className = 'option-button';
+                optionButton.textContent = option;
+                optionButton.addEventListener('click', () => answerQuestion(index, optionButton));
+                optionsEl.appendChild(optionButton);
+            });
+        }
+
+        startTimer();
+    }
+
+    function answerQuestion(selectedIndex, buttonNode) {
+        const item = currentExam.questions[currentExam.currentIndex];
+        const buttons = [...document.querySelectorAll('.option-button')];
+        buttons.forEach((button) => {
+            button.disabled = true;
+            button.classList.add('disabled');
+            if (button.textContent === item.options[item.correctIndex]) {
+                button.classList.add('correct');
+            }
+        });
+
+        if (Number(selectedIndex) === Number(item.correctIndex)) {
+            currentExam.score += 1;
+            buttonNode.classList.add('correct');
+            showToast('Respuesta correcta');
+        } else {
+            buttonNode.classList.add('incorrect');
+            showToast(`Incorrecto. La correcta era: ${item.options[item.correctIndex]}`);
+        }
+
+        updateScoreDisplay();
+        clearInterval(currentExam.timerId);
+
+        setTimeout(() => {
+            currentExam.currentIndex += 1;
+            renderQuestion();
+        }, 900);
+    }
+
+    function updateScoreDisplay() {
+        const scoreEl = document.getElementById('score');
+        if (scoreEl) scoreEl.textContent = String(currentExam.score);
+    }
+
+    function startTimer() {
+        clearInterval(currentExam.timerId);
+        const settings = DIFFICULTY_SETTINGS[currentExam.difficulty] || DIFFICULTY_SETTINGS.normal;
+        currentExam.timeRemaining = Math.round(currentExam.questions.length * settings.secondsPerQuestion);
+        const timerEl = document.getElementById('timer');
+        if (timerEl) timerEl.textContent = String(currentExam.timeRemaining);
+
+        currentExam.timerId = setInterval(() => {
+            currentExam.timeRemaining -= 1;
+            if (timerEl) timerEl.textContent = String(currentExam.timeRemaining);
+            if (currentExam.timeRemaining <= 0) {
+                clearInterval(currentExam.timerId);
+                const buttons = [...document.querySelectorAll('.option-button')];
+                buttons.forEach((button) => {
+                    button.disabled = true;
+                    button.classList.add('disabled');
+                });
+                showToast('Se acabó el tiempo.');
+                setTimeout(() => {
+                    currentExam.currentIndex += 1;
+                    renderQuestion();
+                }, 800);
+            }
+        }, 1000);
+    }
+
+    async function finishExam() {
+        clearInterval(currentExam.timerId);
+        const total = currentExam.questions.length || 1;
+        const scorePercent = Math.round((currentExam.score / total) * 100);
+        const grade = (currentExam.score / total) * 5;
+        const finalScore = document.getElementById('final-score');
+        const finalGrade = document.getElementById('final-grade');
+        const resultMessage = document.getElementById('result-message');
+
+        if (finalScore) finalScore.textContent = `${currentExam.score}/${total}`;
+        if (finalGrade) finalGrade.textContent = grade.toFixed(1);
+
+        if (resultMessage) {
+            if (scorePercent >= 80) {
+                resultMessage.textContent = 'Rendimiento destacado. La preparación y la estrategia han sido excelentes.';
+            } else if (scorePercent >= 60) {
+                resultMessage.textContent = 'Buen rendimiento. Hay margen para mejorar en los puntos más difíciles.';
+            } else if (scorePercent >= 40) {
+                resultMessage.textContent = 'Rendimiento aceptable. La práctica adicional te permitirá más confianza.';
+            } else {
+                resultMessage.textContent = 'El resultado indica que es necesario reforzar el contenido y volver a intentarlo.';
+            }
+        }
+
+        const username = AuthSystem.getSession();
+        if (username) {
+            const saved = await HistoryStore.saveResult({
+                username,
+                subject: currentExam.subject,
+                topic: currentExam.topic || 'general',
+                difficulty: DIFFICULTY_SETTINGS[currentExam.difficulty]?.label || 'Normal',
+                score: currentExam.score,
+                total,
+                created_at: new Date().toISOString()
+            });
+            if (!saved) showToast('El resultado no se pudo guardar en el servidor.');
+        }
+
+        await renderHistory();
+        await updateMenuSummary();
+        showView('result-view');
+    }
+
+    function exitExamToMenu() {
+        if (!confirm('¿Deseas salir del examen?')) return;
+        clearInterval(currentExam.timerId);
+        currentExam.currentIndex = 0;
+        currentExam.score = 0;
+        currentExam.questions = [];
+        showView('menu-view');
+    }
+
+    async function startExamFromConfig() {
+        const settings = buildExamSettings();
+        const count = Math.min(100, Math.max(5, Number(settings.count) || 10));
+
+        currentExam.subject = settings.subject;
+        currentExam.topic = settings.topic;
+        currentExam.difficulty = settings.difficulty;
+        currentExam.count = count;
+        currentExam.score = 0;
+        currentExam.currentIndex = 0;
+        currentExam.startedAt = Date.now();
+
+        try {
+            const response = await fetch(`${API_BASE}/questions`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    subject: settings.subject,
+                    topic: settings.topic,
+                    difficulty: settings.difficulty,
+                    count
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !Array.isArray(result.questions) || !result.questions.length) {
+                throw new Error(result.message || 'No se pudieron generar preguntas.');
+            }
+
+            currentExam.questions = result.questions.map((item) => {
+                const sourceOptions = Array.isArray(item.options) ? item.options : [];
+                const correctOption = sourceOptions[Number(item.correctIndex ?? 0)];
+                const options = shuffleOptions(sourceOptions);
+                return {
+                    question: item.question,
+                    options,
+                    correctIndex: options.indexOf(correctOption),
+                    difficulty: settings.difficulty
+                };
+            });
+
+            if (!currentExam.questions.length) {
+                throw new Error('El backend no devolvió preguntas válidas.');
+            }
+
+            showView('playing-view');
+            renderQuestion();
+            return;
+        } catch (error) {
+            console.error('Fallo al pedir preguntas al backend:', error);
+            showToast(error.message || 'No se pudo conectar con la IA.');
+            return;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const examForm = document.getElementById('exam-form');
+        const btnGoLogin = document.getElementById('btn-go-login');
+        const btnGoRegister = document.getElementById('btn-go-register');
+        const btnLoginBack = document.getElementById('btn-login-back');
+        const btnRegisterBack = document.getElementById('btn-register-back');
+        const btnStartExam = document.getElementById('btn-start-exam');
+        const btnSimulator = document.getElementById('btn-simulator');
+        const btnSimulatorBack = document.getElementById('btn-simulator-back');
+        const simulatorForm = document.getElementById('simulator-form');
+        const btnHistory = document.getElementById('btn-history');
+        const btnConfigBack = document.getElementById('btn-config-back');
+        const btnHistoryBack = document.getElementById('btn-history-back');
+        const btnClearHistory = document.getElementById('btn-clear-history');
+        const btnResultBack = document.getElementById('btn-result-back');
+        const btnLogoutTop = document.getElementById('btn-logout-top');
+        const btnAdminPanel = document.getElementById('btn-admin-panel');
+        const btnAdminBack = document.getElementById('btn-admin-back');
+        const btnBackToMenu = document.getElementById('btn-back-to-menu');
+        const btnExitExam = document.getElementById('btn-exit-exam');
+        const btnResetLeaderboard = document.getElementById('btn-reset-leaderboard');
+        const btnUpdateApiKey = document.getElementById('btn-update-api-key');
+
+        if (btnGoLogin) {
+            btnGoLogin.addEventListener('click', () => showView('login-view'));
+        }
+
+        if (btnGoRegister) {
+            btnGoRegister.addEventListener('click', () => showView('register-view'));
+        }
+
+        if (btnLoginBack) {
+            btnLoginBack.addEventListener('click', () => showView('welcome-view'));
+        }
+
+        if (btnRegisterBack) {
+            btnRegisterBack.addEventListener('click', () => showView('welcome-view'));
+        }
+
+        if (btnStartExam) {
+            btnStartExam.addEventListener('click', () => showView('config-view'));
+        }
+
+        if (btnSimulator) {
+            btnSimulator.addEventListener('click', () => {
+                showView('simulator-view');
+                initShadowLab();
+            });
+        }
+
+        if (btnSimulatorBack) {
+            btnSimulatorBack.addEventListener('click', () => {
+                cancelAnimationFrame(drawSimulation.animationId);
+                showView('menu-view');
+            });
+        }
+
+        if (simulatorForm) {
+            simulatorForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                updateShadowControls();
+            });
+        }
+
+        if (btnHistory) {
+            btnHistory.addEventListener('click', async () => {
+                await renderHistory();
+                showView('history-view');
+            });
+        }
+
+        if (btnConfigBack) {
+            btnConfigBack.addEventListener('click', () => showView('menu-view'));
+        }
+
+        if (btnHistoryBack) {
+            btnHistoryBack.addEventListener('click', () => showView('menu-view'));
+        }
+
+        if (btnClearHistory) {
+            btnClearHistory.addEventListener('click', async () => {
+                if (confirm('¿Deseas borrar todo el historial?')) {
+                    await HistoryStore.clear();
+                    await renderHistory();
+                    await updateMenuSummary();
+                    showToast('Historial borrado');
+                }
+            });
+        }
+
+        if (btnResultBack) {
+            btnResultBack.addEventListener('click', () => showView('menu-view'));
+        }
+
+        if (btnExitExam) {
+            btnExitExam.addEventListener('click', exitExamToMenu);
+        }
+
+        if (btnLogoutTop) {
+            btnLogoutTop.addEventListener('click', () => {
+                AuthSystem.logout();
+                updateMenuSummary();
+                showView('welcome-view');
+                showToast('Sesión cerrada');
+            });
+        }
+
+        if (btnAdminPanel) {
+            btnAdminPanel.addEventListener('click', async () => {
+                if (!AuthSystem.isAdmin()) {
+                    showToast('Solo el administrador puede acceder.');
+                    return;
+                }
+                await loadAdminPanel();
+                showView('admin-view');
+            });
+        }
+
+        if (btnAdminBack) {
+            btnAdminBack.addEventListener('click', () => showView('menu-view'));
+        }
+
+        if (btnResetLeaderboard) {
+            btnResetLeaderboard.addEventListener('click', async () => {
+                if (!confirm('¿Deseas reiniciar la tablilla global?')) return;
+                const response = await fetchAdmin('/admin/reset-history', { method: 'POST' });
+                if (response.ok) {
+                    showToast('Tablilla reiniciada');
+                    await renderHistory();
+                    await loadAdminPanel();
+                } else {
+                    showToast(response.result.message || 'No se pudo reiniciar');
+                }
+            });
+        }
+
+        if (btnUpdateApiKey) {
+            btnUpdateApiKey.addEventListener('click', updateApiKeyFromAdmin);
+        }
+
+        if (btnBackToMenu) {
+            btnBackToMenu.addEventListener('click', () => showView('menu-view'));
+        }
+
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const username = document.getElementById('login-user').value;
+                const password = document.getElementById('login-pass').value;
+                const errorBox = document.getElementById('login-error');
+                const result = await AuthSystem.login(username, password);
+
+                if (!result.success) {
+                    errorBox.textContent = result.message;
+                    return;
+                }
+
+                errorBox.textContent = '';
+                await updateMenuSummary();
+                showView('menu-view');
+                showToast('Sesión iniciada');
+            });
+        }
+
+        if (registerForm) {
+            registerForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const username = document.getElementById('register-user').value;
+                const password = document.getElementById('register-pass').value;
+                const confirm = document.getElementById('register-pass-confirm').value;
+                const errorBox = document.getElementById('register-error');
+
+                if (password !== confirm) {
+                    errorBox.textContent = 'Las contraseñas no coinciden.';
+                    return;
+                }
+
+                const result = await AuthSystem.register(username, password);
+                if (!result.success) {
+                    errorBox.textContent = result.message;
+                    return;
+                }
+
+                errorBox.textContent = '';
+                await AuthSystem.login(username, password);
+                await updateMenuSummary();
+                showView('menu-view');
+                showToast('Cuenta creada');
+            });
+        }
+
+        if (examForm) {
+            examForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                startExamFromConfig();
+            });
+        }
+
+        if (AuthSystem.isLoggedIn()) {
+            updateMenuSummary();
+            showView('menu-view');
+        } else {
+            showView('welcome-view');
+        }
+
+        renderHistory();
+        updateMenuSummary();
+    });
+})();
