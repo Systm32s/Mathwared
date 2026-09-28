@@ -615,6 +615,183 @@
         drawSimulation(result);
     }
 
+    const SHADOW_OBJECTS = {
+        tower: { label: 'Torre', width: 0.72, depth: 0.72, color: '#e6b566', accent: '#f6d58b' },
+        tree: { label: 'Árbol', width: 1.2, depth: 1.2, color: '#4eaf83', accent: '#9fe2a7' },
+        cube: { label: 'Cubo', width: 1.35, depth: 1.35, color: '#6e9eea', accent: '#b4d0ff' },
+        person: { label: 'Persona', width: 0.46, depth: 0.46, color: '#d57964', accent: '#ffb18f' }
+    };
+
+    const shadowScene = { azimuth: 135, elevation: 28, height: 8, object: 'tower', rotation: -0.35, animationId: null, dragging: false, lastX: 0 };
+
+    function shadowDirectionLabel(azimuth) {
+        const directions = ['N', 'NE', 'E', 'SE', 'S', 'SO', 'O', 'NO'];
+        return directions[Math.round(azimuth / 45) % 8];
+    }
+
+    function projectShadowPoint(x, y, z, viewRotation, width, height) {
+        const rotatedX = x * Math.cos(viewRotation) - y * Math.sin(viewRotation);
+        const rotatedY = x * Math.sin(viewRotation) + y * Math.cos(viewRotation);
+        return { x: width / 2 + rotatedX * 31 + rotatedY * 17, y: height * 0.67 + rotatedY * 18 - z * 30 };
+    }
+
+    function drawShadowScene() {
+        if (window.MathwareShadow3D?.instance) {
+            window.MathwareShadow3D.instance.update(shadowScene);
+            const labels = { tower: 'Torre', tree: 'Árbol', cube: 'Cubo', person: 'Persona' };
+            const direction = shadowDirectionLabel(shadowScene.azimuth);
+            const length = (shadowScene.height / Math.tan(shadowScene.elevation * Math.PI / 180)).toFixed(1);
+            const result = document.getElementById('simulation-result');
+            const label = document.getElementById('shadow-time-label');
+            if (result) result.innerHTML = `<strong>${labels[shadowScene.object] || 'Objeto'}: sombra proyectada</strong><span>Dirección: ${direction} · Azimut: ${shadowScene.azimuth}° · Elevación: ${shadowScene.elevation}°</span><b>Longitud de la sombra: ${length} m</b>`;
+            if (label) label.textContent = shadowScene.elevation > 55 ? 'Sol alto' : shadowScene.elevation > 28 ? 'Tarde dorada' : 'Mañana luminosa';
+            return;
+        }
+        const canvas = document.getElementById('simulation-canvas');
+        if (!canvas) return;
+        const context = canvas.getContext('2d');
+        const ratio = window.devicePixelRatio || 1;
+        const bounds = canvas.getBoundingClientRect();
+        const width = Math.max(320, bounds.width || 900);
+        const height = Math.max(260, bounds.height || 560);
+        if (canvas.width !== Math.round(width * ratio) || canvas.height !== Math.round(height * ratio)) {
+            canvas.width = Math.round(width * ratio);
+            canvas.height = Math.round(height * ratio);
+        }
+        context.setTransform(ratio, 0, 0, ratio, 0, 0);
+        const horizon = height * 0.36;
+        const object = SHADOW_OBJECTS[shadowScene.object];
+        const radians = shadowScene.azimuth * Math.PI / 180;
+        const elevation = shadowScene.elevation * Math.PI / 180;
+        const shadowLength = shadowScene.height / Math.tan(elevation);
+        const shadowX = Math.sin(radians) * shadowLength;
+        const shadowY = Math.cos(radians) * shadowLength;
+        const ground = (x, y) => projectShadowPoint(x, y, 0, shadowScene.rotation, width, height);
+        const top = (x, y) => projectShadowPoint(x, y, shadowScene.height, shadowScene.rotation, width, height);
+
+        const sky = context.createLinearGradient(0, 0, 0, height);
+        sky.addColorStop(0, '#152c48');
+        sky.addColorStop(0.57, '#3d6680');
+        sky.addColorStop(0.58, '#c08b5d');
+        sky.addColorStop(1, '#201c24');
+        context.fillStyle = sky;
+        context.fillRect(0, 0, width, height);
+        context.fillStyle = 'rgba(255, 194, 104, 0.16)';
+        context.beginPath();
+        context.arc(width * 0.78, height * 0.2, Math.min(width, height) * 0.12, 0, Math.PI * 2);
+        context.fill();
+        context.fillStyle = '#ffd27d';
+        context.beginPath();
+        context.arc(width * 0.78, height * 0.2, Math.min(width, height) * 0.055, 0, Math.PI * 2);
+        context.fill();
+
+        const horizonGradient = context.createLinearGradient(0, horizon, 0, height);
+        horizonGradient.addColorStop(0, 'rgba(35, 42, 48, 0.14)');
+        horizonGradient.addColorStop(1, 'rgba(8, 12, 18, 0.7)');
+        context.fillStyle = horizonGradient;
+        context.fillRect(0, horizon, width, height - horizon);
+        context.strokeStyle = 'rgba(255, 221, 163, 0.17)';
+        context.lineWidth = 1;
+        for (let distance = -18; distance <= 18; distance += 1.5) {
+            const start = ground(distance, -15);
+            const end = ground(distance, 15);
+            context.beginPath(); context.moveTo(start.x, start.y); context.lineTo(end.x, end.y); context.stroke();
+        }
+        for (let distance = -15; distance <= 15; distance += 1.5) {
+            const start = ground(-18, distance);
+            const end = ground(18, distance);
+            context.beginPath(); context.moveTo(start.x, start.y); context.lineTo(end.x, end.y); context.stroke();
+        }
+
+        const shadowBase = ground(0, 0);
+        const shadowTip = ground(shadowX, shadowY);
+        const shadowTop = ground(shadowX + object.width * 0.45, shadowY + object.depth * 0.45);
+        context.fillStyle = 'rgba(8, 13, 20, 0.56)';
+        context.beginPath();
+        context.moveTo(shadowBase.x, shadowBase.y);
+        context.lineTo(shadowTip.x, shadowTip.y);
+        context.lineTo(shadowTop.x, shadowTop.y);
+        context.lineTo(ground(object.width * 0.45, object.depth * 0.45).x, ground(object.width * 0.45, object.depth * 0.45).y);
+        context.closePath(); context.fill();
+
+        const base = ground(0, 0);
+        const baseRight = ground(object.width, 0);
+        const baseBack = ground(0, object.depth);
+        const baseFar = ground(object.width, object.depth);
+        const topLeft = top(0, 0);
+        const topRight = top(object.width, 0);
+        const topBack = top(0, object.depth);
+        const topFar = top(object.width, object.depth);
+        context.fillStyle = object.color;
+        context.beginPath(); context.moveTo(base.x, base.y); context.lineTo(baseRight.x, baseRight.y); context.lineTo(topRight.x, topRight.y); context.lineTo(topLeft.x, topLeft.y); context.closePath(); context.fill();
+        context.fillStyle = object.accent;
+        context.beginPath(); context.moveTo(base.x, base.y); context.lineTo(baseBack.x, baseBack.y); context.lineTo(topBack.x, topBack.y); context.lineTo(topLeft.x, topLeft.y); context.closePath(); context.fill();
+        context.fillStyle = object.color;
+        context.beginPath(); context.moveTo(topLeft.x, topLeft.y); context.lineTo(topRight.x, topRight.y); context.lineTo(topFar.x, topFar.y); context.lineTo(topBack.x, topBack.y); context.closePath(); context.fill();
+        if (shadowScene.object === 'tree') {
+            context.fillStyle = '#70482f';
+            context.fillRect(base.x - 5, topLeft.y + 18, 10, base.y - topLeft.y - 18);
+            context.fillStyle = object.color;
+            context.beginPath(); context.arc(topLeft.x + 12, topLeft.y + 10, 26, 0, Math.PI * 2); context.fill();
+        }
+        if (shadowScene.object === 'person') {
+            context.fillStyle = object.accent;
+            context.beginPath(); context.arc(topLeft.x + 9, topLeft.y - 13, 9, 0, Math.PI * 2); context.fill();
+        }
+        context.strokeStyle = 'rgba(255, 255, 255, 0.34)';
+        context.lineWidth = 1.5;
+        context.beginPath(); context.moveTo(base.x, base.y); context.lineTo(baseRight.x, baseRight.y); context.lineTo(topRight.x, topRight.y); context.lineTo(topFar.x, topFar.y); context.stroke();
+        context.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        context.font = '600 12px Inter, sans-serif';
+        context.fillText(`${shadowScene.height.toFixed(1)} m`, topRight.x + 8, (topRight.y + baseRight.y) / 2);
+        const result = document.getElementById('simulation-result');
+        const label = document.getElementById('shadow-time-label');
+        const direction = shadowDirectionLabel(shadowScene.azimuth);
+        const length = shadowLength.toFixed(1);
+        if (result) result.innerHTML = `<strong>${object.label}: sombra proyectada</strong><span>Dirección: ${direction} · Azimut: ${shadowScene.azimuth}° · Elevación: ${shadowScene.elevation}°</span><b>Longitud de la sombra: ${length} m</b>`;
+        if (label) label.textContent = shadowScene.elevation > 55 ? 'Sol alto' : shadowScene.elevation > 28 ? 'Tarde dorada' : 'Mañana luminosa';
+    }
+
+    function updateShadowControls() {
+        shadowScene.object = document.getElementById('shadow-object')?.value || 'tower';
+        shadowScene.height = Number(document.getElementById('shadow-height')?.value || 8);
+        shadowScene.azimuth = Number(document.getElementById('shadow-azimuth')?.value || 135);
+        shadowScene.elevation = Number(document.getElementById('shadow-elevation')?.value || 28);
+        const heightValue = document.getElementById('shadow-height-value');
+        const azimuthValue = document.getElementById('shadow-azimuth-value');
+        const elevationValue = document.getElementById('shadow-elevation-value');
+        if (heightValue) heightValue.textContent = `${shadowScene.height.toFixed(1)} m`;
+        if (azimuthValue) azimuthValue.textContent = `${shadowScene.azimuth}° ${shadowDirectionLabel(shadowScene.azimuth)}`;
+        if (elevationValue) elevationValue.textContent = `${shadowScene.elevation}°`;
+        drawShadowScene();
+    }
+
+    function resetShadowScene() {
+        const defaults = { 'shadow-object': 'tower', 'shadow-height': 8, 'shadow-azimuth': 135, 'shadow-elevation': 28 };
+        Object.entries(defaults).forEach(([id, value]) => { const input = document.getElementById(id); if (input) input.value = value; });
+        shadowScene.rotation = -0.35;
+        updateShadowControls();
+    }
+
+    function initShadowLab() {
+        if (initShadowLab.ready) {
+            updateShadowControls();
+            return;
+        }
+        initShadowLab.ready = true;
+        const canvas = document.getElementById('simulation-canvas');
+        if (canvas && window.MathwareShadow3D?.create) {
+            window.MathwareShadow3D.instance = window.MathwareShadow3D.create(canvas);
+        }
+        ['shadow-object', 'shadow-height', 'shadow-azimuth', 'shadow-elevation'].forEach((id) => document.getElementById(id)?.addEventListener('input', updateShadowControls));
+        document.getElementById('btn-shadow-reset')?.addEventListener('click', resetShadowScene);
+        canvas?.addEventListener('pointerdown', (event) => { shadowScene.dragging = true; shadowScene.lastX = event.clientX; canvas.setPointerCapture(event.pointerId); });
+        canvas?.addEventListener('pointermove', (event) => { if (!shadowScene.dragging) return; shadowScene.rotation += (event.clientX - shadowScene.lastX) * 0.008; shadowScene.lastX = event.clientX; drawShadowScene(); });
+        canvas?.addEventListener('pointerup', () => { shadowScene.dragging = false; });
+        window.addEventListener('resize', () => window.MathwareShadow3D?.instance?.resize());
+        updateShadowControls();
+    }
+
     async function updateMenuSummary() {
         const username = AuthSystem.getSession();
         const greeting = document.getElementById('welcome-user');
@@ -1165,7 +1342,6 @@
         const btnSimulator = document.getElementById('btn-simulator');
         const btnSimulatorBack = document.getElementById('btn-simulator-back');
         const simulatorForm = document.getElementById('simulator-form');
-        const simulationType = document.getElementById('simulation-type');
         const btnHistory = document.getElementById('btn-history');
         const btnConfigBack = document.getElementById('btn-config-back');
         const btnHistoryBack = document.getElementById('btn-history-back');
@@ -1201,8 +1377,8 @@
 
         if (btnSimulator) {
             btnSimulator.addEventListener('click', () => {
-                renderSimulationFields();
                 showView('simulator-view');
+                initShadowLab();
             });
         }
 
@@ -1213,14 +1389,10 @@
             });
         }
 
-        if (simulationType) {
-            simulationType.addEventListener('change', renderSimulationFields);
-        }
-
         if (simulatorForm) {
             simulatorForm.addEventListener('submit', (event) => {
                 event.preventDefault();
-                runSimulation();
+                updateShadowControls();
             });
         }
 
