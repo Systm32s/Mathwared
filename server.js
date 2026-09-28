@@ -7,6 +7,8 @@ const crypto = require('crypto');
 const { Pool } = require('pg');
 
 const app = express();
+const fs = require('fs');
+const sqlite3 = require('sqlite3').verbose();
 const PORT = Number(process.env.PORT) || 3000;
 const SUPABASE_DB_URL = process.env.SUPABASE_DB_URL || '';
 const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
@@ -15,6 +17,12 @@ const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'change_me_now';
 const sessions = new Map();
 const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
+const DATA_DIR = path.join(__dirname, 'data');
+const SQLITE_DB_PATH = path.join(DATA_DIR, 'mathware.db');
+
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
 
 if (process.env.NODE_ENV === 'production' && (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD)) {
   throw new Error('ADMIN_USERNAME y ADMIN_PASSWORD son obligatorios en producción.');
@@ -24,14 +32,16 @@ function isOwnerUsername(username) {
   return String(username || '').trim() === ADMIN_USERNAME;
 }
 
-if (!SUPABASE_DB_URL) {
-  throw new Error('SUPABASE_DB_URL es obligatoria para conectar con Supabase.');
+let db;
+if (SUPABASE_DB_URL) {
+  db = new Pool({
+    connectionString: SUPABASE_DB_URL,
+    ssl: { rejectUnauthorized: false }
+  });
+} else {
+  console.warn('No se detectó SUPABASE_DB_URL. Usando SQLite local en data/mathware.db.');
+  db = new sqlite3.Database(SQLITE_DB_PATH);
 }
-
-const db = new Pool({
-  connectionString: SUPABASE_DB_URL,
-  ssl: { rejectUnauthorized: false }
-});
 
 function postgresQuery(sql) {
   let index = 0;
@@ -39,18 +49,45 @@ function postgresQuery(sql) {
 }
 
 async function runQuery(sql, params = []) {
-  const result = await db.query(postgresQuery(sql), params);
-  return { changes: result.rowCount };
+  if (SUPABASE_DB_URL) {
+    const result = await db.query(postgresQuery(sql), params);
+    return { changes: result.rowCount };
+  }
+
+  return await new Promise((resolve, reject) => {
+    db.run(sql, params, function (err) {
+      if (err) return reject(err);
+      resolve({ changes: this.changes || 0 });
+    });
+  });
 }
 
 async function getQuery(sql, params = []) {
-  const result = await db.query(postgresQuery(sql), params);
-  return result.rows[0] || null;
+  if (SUPABASE_DB_URL) {
+    const result = await db.query(postgresQuery(sql), params);
+    return result.rows[0] || null;
+  }
+
+  return await new Promise((resolve, reject) => {
+    db.get(sql, params, (err, row) => {
+      if (err) return reject(err);
+      resolve(row || null);
+    });
+  });
 }
 
 async function allQuery(sql, params = []) {
-  const result = await db.query(postgresQuery(sql), params);
-  return result.rows;
+  if (SUPABASE_DB_URL) {
+    const result = await db.query(postgresQuery(sql), params);
+    return result.rows;
+  }
+
+  return await new Promise((resolve, reject) => {
+    db.all(sql, params, (err, rows) => {
+      if (err) return reject(err);
+      resolve(rows || []);
+    });
+  });
 }
 
 function hashPassword(password, salt) {
@@ -119,10 +156,18 @@ async function getGroqModel(apiKey) {
 
 
 async function ensureColumn(tableName, columnName, definition) {
-  const columns = await allQuery(
-    'SELECT column_name AS name FROM information_schema.columns WHERE table_schema = $1 AND table_name = $2',
-    ['public', tableName]
-  );
+  if (SUPABASE_DB_URL) {
+    const columns = await allQuery(
+      'SELECT column_name AS name FROM information_schema.columns WHERE table_schema = $1 AND table_name = $2',
+      ['public', tableName]
+    );
+    if (!columns.some((column) => column.name === columnName)) {
+      await runQuery(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${definition}`);
+    }
+    return;
+  }
+
+  const columns = await allQuery(`PRAGMA table_info(${tableName})`);
   if (!columns.some((column) => column.name === columnName)) {
     await runQuery(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${definition}`);
   }
