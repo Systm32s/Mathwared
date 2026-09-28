@@ -469,7 +469,7 @@
     }
 
     function drawSimulationLegacy(result) {
-        const canvas = document.getElementById('simulation-canvas');
+        const canvas = document.getElementById('motion-simulation-canvas');
         if (!canvas) return;
         const context = canvas.getContext('2d');
         const width = canvas.width;
@@ -518,7 +518,7 @@
     }
 
     function drawSimulation(result) {
-        const canvas = document.getElementById('simulation-canvas');
+        const canvas = document.getElementById('motion-simulation-canvas');
         if (!canvas || !result.motion) return;
         const context = canvas.getContext('2d');
         const width = canvas.width;
@@ -610,7 +610,7 @@
         values.gravity = gravity;
         const result = definition.calculate(values);
         result.motion = createSimulationMotion(type, values);
-        const resultBox = document.getElementById('simulation-result');
+        const resultBox = document.getElementById('motion-simulation-result');
         resultBox.innerHTML = `<strong>${result.title}</strong><span>${result.formula}</span><span>${result.values}</span><b>${result.result}</b>`;
         drawSimulation(result);
     }
@@ -1339,9 +1339,12 @@
         const btnLoginBack = document.getElementById('btn-login-back');
         const btnRegisterBack = document.getElementById('btn-register-back');
         const btnStartExam = document.getElementById('btn-start-exam');
+        const btnMotionSimulator = document.getElementById('btn-motion-simulator');
+        const btnMotionSimulatorBack = document.getElementById('btn-motion-simulator-back');
         const btnSimulator = document.getElementById('btn-simulator');
         const btnSimulatorBack = document.getElementById('btn-simulator-back');
         const simulatorForm = document.getElementById('simulator-form');
+        const simulationType = document.getElementById('simulation-type');
         const btnHistory = document.getElementById('btn-history');
         const btnConfigBack = document.getElementById('btn-config-back');
         const btnHistoryBack = document.getElementById('btn-history-back');
@@ -1375,6 +1378,24 @@
             btnStartExam.addEventListener('click', () => showView('config-view'));
         }
 
+        if (btnMotionSimulator) {
+            btnMotionSimulator.addEventListener('click', () => {
+                renderSimulationFields();
+                showView('motion-simulator-view');
+            });
+        }
+
+        if (btnMotionSimulatorBack) {
+            btnMotionSimulatorBack.addEventListener('click', () => {
+                cancelAnimationFrame(drawSimulation.animationId);
+                showView('menu-view');
+            });
+        }
+
+        if (simulationType) {
+            simulationType.addEventListener('change', renderSimulationFields);
+        }
+
         if (btnSimulator) {
             btnSimulator.addEventListener('click', () => {
                 showView('simulator-view');
@@ -1392,7 +1413,7 @@
         if (simulatorForm) {
             simulatorForm.addEventListener('submit', (event) => {
                 event.preventDefault();
-                updateShadowControls();
+                runSimulation();
             });
         }
 
