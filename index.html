@@ -100,7 +100,7 @@
                     <p id="welcome-user" class="menu-greeting">Bienvenido</p>
                     <div class="stacked-actions">
                         <button id="btn-start-exam" class="primary-button" type="button">Generar examen</button>
-                        <button id="btn-simulator" class="secondary-button" type="button">Simulador de física</button>
+                        <button id="btn-simulator" class="secondary-button" type="button">Laboratorio de sombras 3D</button>
                         <button id="btn-history" class="secondary-button" type="button">Estadísticas</button>
                         <button id="btn-admin-panel" class="ghost-button admin-button hidden" type="button">Panel de administrador</button>
                     </div>
@@ -117,56 +117,55 @@
                 </div>
             </section>
 
-            <section id="simulator-view" class="view" aria-label="Simulador de física">
+            <section id="simulator-view" class="view" aria-label="Simulador de sombras 3D">
                 <div class="panel panel-wide simulator-panel">
                     <div class="simulator-heading">
                         <div>
-                            <p class="eyebrow">Laboratorio de física</p>
-                            <h2 class="section-title">Simulador</h2>
-                            <p class="simulator-copy">Explora el comportamiento de un sistema, cambia sus variables y observa el resultado.</p>
+                            <p class="eyebrow">Laboratorio de óptica</p>
+                            <h2 class="section-title">Sombras 3D</h2>
+                            <p class="simulator-copy">Ajusta la posición del sol y descubre cómo la luz transforma la sombra de un objeto.</p>
                         </div>
-                        <span id="simulation-category" class="difficulty-badge">Cinemática</span>
+                        <span class="difficulty-badge shadow-live-badge"><span class="live-dot"></span> En vivo</span>
                     </div>
 
                     <div class="simulator-layout">
                         <form id="simulator-form" class="simulator-controls" novalidate>
-                            <label class="field">
-                                <span>Sistema</span>
-                                <select id="simulation-type">
-                                    <option value="mru">Movimiento rectilíneo uniforme</option>
-                                    <option value="circular">Movimiento circular</option>
-                                    <option value="vertical">Movimiento vertical</option>
-                                    <option value="launch">Lanzamiento vertical</option>
-                                    <option value="freefall">Caída libre</option>
-                                    <option value="parabolic">Movimiento parabólico</option>
-                                    <option value="semiparabolic">Movimiento semiparabólico</option>
-                                    <option value="newton1">Primera ley de Newton</option>
-                                    <option value="newton2">Segunda ley de Newton</option>
-                                    <option value="newton3">Tercera ley de Newton</option>
-                                    <option value="torque">Torque o momento</option>
-                                    <option value="rotational">Equilibrio de rotación</option>
-                                    <option value="gravitycenter">Centro de gravedad</option>
+                            <label class="field shadow-select-field">
+                                <span>Objeto</span>
+                                <select id="shadow-object">
+                                    <option value="tower">Torre</option>
+                                    <option value="tree">Árbol</option>
+                                    <option value="cube">Cubo</option>
+                                    <option value="person">Persona</option>
                                 </select>
                             </label>
-                            <label class="field gravity-field">
-                                <span>Gravedad personalizada <small>(m/s²)</small></span>
-                                <input id="simulation-gravity" type="number" min="0.01" max="30" step="0.01" value="9.81" required />
-                                <small class="field-hint">Límite permitido: 0.01 a 30 m/s²</small>
-                            </label>
-                            <div id="simulation-fields" class="simulation-fields"></div>
+                            <div class="shadow-control-group">
+                                <div class="range-heading"><span>Altura del objeto</span><output id="shadow-height-value">8.0 m</output></div>
+                                <input id="shadow-height" class="shadow-range" type="range" min="2" max="14" step="0.1" value="8" />
+                            </div>
+                            <div class="shadow-control-group">
+                                <div class="range-heading"><span>Azimut solar</span><output id="shadow-azimuth-value">135° SE</output></div>
+                                <input id="shadow-azimuth" class="shadow-range" type="range" min="0" max="359" step="1" value="135" />
+                            </div>
+                            <div class="shadow-control-group">
+                                <div class="range-heading"><span>Altura solar</span><output id="shadow-elevation-value">28°</output></div>
+                                <input id="shadow-elevation" class="shadow-range" type="range" min="8" max="78" step="1" value="28" />
+                            </div>
+                            <div class="shadow-tip"><span class="tip-icon">✦</span><span>Arrastra sobre la escena para girar la vista.</span></div>
                             <div class="form-actions">
-                                <button class="primary-button" type="submit">Calcular y simular</button>
+                                <button id="btn-shadow-reset" class="primary-button" type="button">Restablecer escena</button>
                                 <button id="btn-simulator-back" class="ghost-button" type="button">Volver</button>
                             </div>
                         </form>
 
                         <div class="simulation-stage-wrap">
-                            <div class="simulation-stage">
-                                <canvas id="simulation-canvas" width="640" height="360" aria-label="Animación de la simulación"></canvas>
+                            <div class="simulation-stage shadow-stage">
+                                <canvas id="simulation-canvas" width="900" height="560" aria-label="Escena 3D del simulador de sombras"></canvas>
+                                <div class="scene-overlay"><span class="sun-glyph">☼</span><span id="shadow-time-label">Mañana luminosa</span></div>
                             </div>
                             <div id="simulation-result" class="simulation-result" aria-live="polite">
-                                <strong>Listo para simular</strong>
-                                <span>Selecciona un sistema y define sus valores.</span>
+                                <strong>La sombra está lista para estudiar</strong>
+                                <span>Mueve los controles para cambiar la dirección y el ángulo de la luz.</span>
                             </div>
                         </div>
                     </div>
@@ -343,6 +342,8 @@
 
     <div id="toast" class="toast" aria-live="polite"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+    <script src="shadow3d.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
