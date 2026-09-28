@@ -397,12 +397,104 @@ button {
     border-radius: 18px;
     background: #0c1626;
     aspect-ratio: 16 / 9;
+    position: relative;
 }
 
 #simulation-canvas {
     display: block;
     width: 100%;
     height: 100%;
+    cursor: grab;
+    touch-action: none;
+}
+
+#simulation-canvas:active {
+    cursor: grabbing;
+}
+
+.shadow-live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #a7f3c3;
+    background: rgba(74, 222, 128, 0.1);
+    border-color: rgba(74, 222, 128, 0.3);
+}
+
+.live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.12);
+}
+
+.shadow-control-group {
+    padding: 13px 14px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.range-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 12px;
+    color: var(--muted);
+    font-size: 0.86rem;
+}
+
+.range-heading output {
+    color: #ffd27d;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.shadow-range {
+    width: 100%;
+    height: 5px;
+    accent-color: #f6b85c;
+    cursor: pointer;
+}
+
+.shadow-tip {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 12px 13px;
+    border-left: 2px solid #f6b85c;
+    background: rgba(246, 184, 92, 0.08);
+    color: #c5b9a9;
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+.tip-icon {
+    color: #ffd27d;
+    font-size: 1.1rem;
+}
+
+.scene-overlay {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    background: rgba(11, 16, 32, 0.42);
+    backdrop-filter: blur(8px);
+    color: #f5dfb1;
+    font-size: 0.74rem;
+    font-weight: 600;
+}
+
+.sun-glyph {
+    color: #ffd27d;
+    font-size: 1.05rem;
 }
 
 .simulation-result {
