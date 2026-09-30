@@ -149,7 +149,7 @@
                                     <option value="gravitycenter">Centro de gravedad</option>
                                 </select>
                             </label>
-                            <label class="field gravity-field">
+                            <label id="simulation-gravity-field" class="field gravity-field">
                                 <span>Gravedad personalizada <small>(m/s²)</small></span>
                                 <input id="simulation-gravity" type="number" min="0.01" max="30" step="0.01" value="9.81" required />
                                 <small class="field-hint">Límite permitido: 0.01 a 30 m/s²</small>
@@ -164,6 +164,11 @@
                             <div class="simulation-stage">
                                 <canvas id="motion-simulation-canvas" width="640" height="360" aria-label="Animación del simulador de movimientos"></canvas>
                             </div>
+                                <div id="mru-live-readout" class="mru-live-readout hidden" aria-live="polite">
+                                    <div><span>Tiempo</span><strong id="mru-current-time">0.00 s</strong></div>
+                                    <div><span>Posición</span><strong id="mru-current-position">0.00 m</strong></div>
+                                    <div><span>Velocidad constante</span><strong id="mru-current-velocity">0.00 m/s</strong></div>
+                                </div>
                             <div id="motion-simulation-result" class="simulation-result" aria-live="polite">
                                 <strong>Listo para simular</strong>
                                 <span>Selecciona un sistema y define sus valores.</span>
