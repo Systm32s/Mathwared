@@ -443,7 +443,20 @@
     }
 
     const SIMULATION_DEFINITIONS = {
-        mru: { category: 'Cinemática', fields: [['velocity', 'Velocidad', 20, 'm/s'], ['time', 'Tiempo', 5, 's']], calculate: ({ velocity, time }) => ({ title: 'Movimiento rectilíneo uniforme', formula: 'x = v · t', values: `x = ${velocity} · ${time}`, result: `Distancia: ${(velocity * time).toFixed(2)} m`, path: 'line' }) },
+        mru: {
+            category: 'Cinemática',
+            fields: [['initialPosition', 'Posición inicial', 0, 'm'], ['velocity', 'Velocidad constante', 4, 'm/s'], ['time', 'Tiempo', 5, 's']],
+            calculate: ({ initialPosition, velocity, time }) => {
+                const finalPosition = initialPosition + velocity * time;
+                return {
+                    title: 'Movimiento rectilíneo uniforme',
+                    formula: 'x(t) = x₀ + v · t',
+                    values: `x(${time}) = ${initialPosition} + (${velocity} · ${time})`,
+                    result: `Desplazamiento: ${(velocity * time).toFixed(2)} m · Posición final: ${finalPosition.toFixed(2)} m`,
+                    path: 'line'
+                };
+            }
+        },
         circular: { category: 'Cinemática', fields: [['radius', 'Radio', 3, 'm'], ['angularVelocity', 'Velocidad angular', 2, 'rad/s'], ['time', 'Tiempo', 5, 's']], calculate: ({ radius, angularVelocity, time }) => ({ title: 'Movimiento circular', formula: 'θ = ω · t', values: `θ = ${angularVelocity} · ${time}`, result: `Ángulo: ${(angularVelocity * time).toFixed(2)} rad · Velocidad lineal: ${(radius * angularVelocity).toFixed(2)} m/s · Período: ${(2 * Math.PI / Math.max(0.01, Math.abs(angularVelocity))).toFixed(2)} s`, path: 'circle' }) },
         vertical: { category: 'Cinemática', fields: [['initialHeight', 'Altura inicial', 20, 'm'], ['initialVelocity', 'Velocidad inicial', 0, 'm/s'], ['time', 'Tiempo', 2, 's']], calculate: ({ initialHeight, initialVelocity, time, gravity }) => ({ title: 'Movimiento vertical', formula: 'y = y₀ + v₀t − ½gt²', values: `y = ${initialHeight} + ${initialVelocity}(${time}) − ½(${gravity})(${time})²`, result: `Altura: ${Math.max(0, initialHeight + initialVelocity * time - 0.5 * gravity * time * time).toFixed(2)} m`, path: 'vertical' }) },
         launch: { category: 'Cinemática', fields: [['initialVelocity', 'Velocidad de lanzamiento', 18, 'm/s']], calculate: ({ initialVelocity, gravity }) => ({ title: 'Lanzamiento vertical', formula: 'hₘₐₓ = v₀² / 2g', values: `hₘₐₓ = ${initialVelocity}² / (2 · ${gravity})`, result: `Altura máxima: ${(initialVelocity * initialVelocity / (2 * gravity)).toFixed(2)} m · Tiempo total: ${(2 * initialVelocity / gravity).toFixed(2)} s`, path: 'vertical' }) },
@@ -463,8 +476,10 @@
         const definition = SIMULATION_DEFINITIONS[type];
         const fields = document.getElementById('simulation-fields');
         const category = document.getElementById('simulation-category');
+        const gravityField = document.getElementById('simulation-gravity-field');
         if (!definition || !fields) return;
         if (category) category.textContent = definition.category;
+        if (gravityField) gravityField.classList.toggle('hidden', type === 'mru');
         fields.innerHTML = definition.fields.map(([id, label, value, unit]) => `<label class="field simulation-field"><span>${label} <small>(${unit})</small></span><input id="simulation-${id}" data-simulation-input="${id}" type="number" step="any" value="${value}" required /></label>`).join('');
     }
 
@@ -502,7 +517,13 @@
 
     function createSimulationMotion(type, values) {
         const gravity = values.gravity || 9.81;
-        if (type === 'mru') return { kind: 'line', duration: Math.max(0.01, values.time), distance: values.velocity * values.time, velocity: values.velocity };
+        if (type === 'mru') return {
+            kind: 'line',
+            duration: Math.max(0.01, values.time),
+            initialPosition: values.initialPosition,
+            finalPosition: values.initialPosition + values.velocity * values.time,
+            velocity: values.velocity
+        };
         if (type === 'circular') return { kind: 'circle', duration: Math.max(0.01, values.time), radius: values.radius, angularVelocity: values.angularVelocity };
         if (type === 'vertical') return { kind: 'vertical', duration: Math.max(0.01, values.time), height: values.initialHeight, initialHeight: values.initialHeight, initialVelocity: values.initialVelocity, gravity };
         if (type === 'launch') return { kind: 'vertical', duration: Math.max(0.01, 2 * values.initialVelocity / gravity), height: 0, initialHeight: 0, initialVelocity: values.initialVelocity, gravity };
@@ -544,10 +565,46 @@
             context.fillStyle = '#fbbf24';
 
             if (motion.kind === 'line') {
-                const normalizedDistance = motion.distance ? (motion.velocity * physicalTime) / motion.distance : 0;
-                const x = 45 + Math.max(0, Math.min(1, normalizedDistance)) * (width - 90);
-                context.beginPath(); context.moveTo(40, height - 45); context.lineTo(width - 40, height - 45); context.stroke();
-                context.beginPath(); context.arc(x, height - 57, 12, 0, Math.PI * 2); context.fill();
+                const position = motion.initialPosition + motion.velocity * physicalTime;
+                const lowerPosition = Math.min(motion.initialPosition, motion.finalPosition);
+                const upperPosition = Math.max(motion.initialPosition, motion.finalPosition);
+                const padding = Math.max(1, (upperPosition - lowerPosition) * 0.15);
+                const axisStart = 60;
+                const axisEnd = width - 60;
+                const axisY = height * 0.62;
+                const positionToX = (value) => axisStart + (value - lowerPosition + padding) / (upperPosition - lowerPosition + padding * 2) * (axisEnd - axisStart);
+                const x = positionToX(position);
+                context.strokeStyle = 'rgba(148, 163, 184, 0.3)';
+                context.lineWidth = 1;
+                for (let tick = 0; tick <= 5; tick += 1) {
+                    const tickX = axisStart + (axisEnd - axisStart) * tick / 5;
+                    const tickPosition = lowerPosition - padding + (upperPosition - lowerPosition + padding * 2) * tick / 5;
+                    context.beginPath(); context.moveTo(tickX, axisY - 9); context.lineTo(tickX, axisY + 9); context.stroke();
+                    context.fillStyle = '#9ca3af'; context.font = '12px sans-serif'; context.textAlign = 'center';
+                    context.fillText(`${tickPosition.toFixed(1)} m`, tickX, axisY + 30);
+                }
+                context.strokeStyle = '#6ea8fe'; context.lineWidth = 3;
+                context.beginPath(); context.moveTo(axisStart, axisY); context.lineTo(axisEnd, axisY); context.stroke();
+                context.fillStyle = '#e5e7eb'; context.font = '14px sans-serif'; context.textAlign = 'left';
+                context.fillText('Posición', axisStart, axisY - 28);
+                context.fillStyle = '#9ca3af'; context.textAlign = 'center';
+                context.fillText(`x₀ = ${motion.initialPosition.toFixed(2)} m`, positionToX(motion.initialPosition), axisY - 34);
+                context.fillStyle = '#fbbf24';
+                context.beginPath(); context.arc(x, axisY, 12, 0, Math.PI * 2); context.fill();
+                const direction = Math.sign(motion.velocity);
+                if (direction) {
+                    context.beginPath();
+                    context.moveTo(x + direction * 19, axisY);
+                    context.lineTo(x + direction * 10, axisY - 6);
+                    context.lineTo(x + direction * 10, axisY + 6);
+                    context.closePath(); context.fill();
+                }
+                const currentTime = document.getElementById('mru-current-time');
+                const currentPosition = document.getElementById('mru-current-position');
+                const currentVelocity = document.getElementById('mru-current-velocity');
+                if (currentTime) currentTime.textContent = `${physicalTime.toFixed(2)} s`;
+                if (currentPosition) currentPosition.textContent = `${position.toFixed(2)} m`;
+                if (currentVelocity) currentVelocity.textContent = `${motion.velocity.toFixed(2)} m/s`;
             } else if (motion.kind === 'circle') {
                 const radius = Math.max(25, Math.min(125, motion.radius * 30));
                 const angle = motion.angularVelocity * physicalTime;
@@ -589,6 +646,8 @@
     function runSimulation() {
         const type = document.getElementById('simulation-type').value;
         const definition = SIMULATION_DEFINITIONS[type];
+        const liveReadout = document.getElementById('mru-live-readout');
+        if (liveReadout) liveReadout.classList.toggle('hidden', type !== 'mru');
         const values = {};
         const gravityInput = document.getElementById('simulation-gravity');
         const rawGravity = Number(gravityInput?.value);
