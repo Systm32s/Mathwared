@@ -418,6 +418,34 @@ button {
     cursor: grabbing;
 }
 
+.mru-live-readout {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.mru-live-readout > div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+    padding: 11px 12px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.mru-live-readout span {
+    color: var(--muted);
+    font-size: 0.76rem;
+}
+
+.mru-live-readout strong {
+    overflow-wrap: anywhere;
+    color: var(--text);
+    font-size: 0.94rem;
+}
+
 .shadow-live-badge {
     display: inline-flex;
     align-items: center;
@@ -879,6 +907,10 @@ button {
     }
 
     .simulation-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .mru-live-readout {
         grid-template-columns: 1fr;
     }
 
